@@ -1,4 +1,4 @@
-" <Leader>
+" <leader>
 " 修改leader键
 " only work in local namespace
 let mapleader = ','
@@ -32,6 +32,7 @@ autocmd BufWritePost $MYVIMRC source $MYVIMRC
 syntax on
 " detect file type
 filetype on
+filetype indent on
 " load plugin by file type
 filetype plugin on
 " 启动自动补全
@@ -45,11 +46,6 @@ set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
 " Remember info about open buffers on close
 " 存储缓冲列表参考:https://blog.csdn.net/huiguixian/article/details/6447665
 set viminfo^=%
-
-" 打开自动定位到最后编辑的位置, 需要确认 .viminfo 当前用户可写
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
 
 " 备份,到另一个位置. 防止误删, 目前是取消备份
 "set backup
@@ -65,10 +61,26 @@ set noswapfile
 " 好处：误删什么的，如果以前屏幕打开，可以找回
 set t_ti= t_te=
 
+" 鼠标暂不启用, 键盘党....
+set mouse-=a
+
+" 启用鼠标
+" set mouse=a
+" Hide the mouse cursor while typing
+" set mousehide
+
+
 " 开启实时搜索
 set incsearch
 " 高亮搜索内容
 set hlsearch
+
+" 搜索相关
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+" 进入搜索Use sane regexes"
+nnoremap / /\v
+vnoremap / /\v
 
 
 " Keep search pattern at the center of the screen.
@@ -92,13 +104,89 @@ set magic
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
+
+"==========================================
+" others 其它设置
+"==========================================
+
+" 自动补全配置
+" 让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+set completeopt=longest,menu
+
+" 增强模式中的命令行自动完成操作
+set wildmenu
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc,*.class
+
+
+" 打开自动定位到最后编辑的位置, 需要确认 .viminfo 当前用户可写
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" disbale paste mode when leaving insert mode
+au InsertLeave * set nopaste
+
+" 离开插入模式后自动关闭预览窗口
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" 回车即选中当前项
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+
+" In the quickfix window, <CR> is used to jump to the error under the
+" cursor, so undefine the mapping there.
+autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+" quickfix window  s/v to open in split window,  ,gd/,jd => quickfix window => open it
+autocmd BufReadPost quickfix nnoremap <buffer> v <C-w><Enter><C-w>L
+autocmd BufReadPost quickfix nnoremap <buffer> s <C-w><Enter><C-w>K
+
+" command-line window
+autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
+
+
+" 上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+
+
+" F5 set paste问题已解决, 粘贴代码前不需要按F5了
+" F5 粘贴模式paste_mode开关,用于有格式的代码粘贴
+" Automatically set paste mode in Vim when pasting in insert mode
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
 " =================================
 " 配色方案
 " theme主题
 " =================================
+
+
+" Set extra options when running in GUI mode
+if has("gui_running")
+    set guifont=Monaco:h24
+    if has("gui_gtk2")   "GTK2
+        set guifont=Monaco\ 22,Monospace\ 22
+    endif
+    set guioptions-=T
+    set guioptions+=e
+    set guioptions-=r
+    set guioptions-=L
+    set guitablabel=%M\ %t
+    set showtabline=1
+    set linespace=2
+    set noimd
+    set t_Co=256
+endif
+
 set background=dark
 if !has('gui_running')
-  set t_Co=256
+    set t_Co=256
 endif
 let base16colorspace=256
 set termguicolors
@@ -130,7 +218,24 @@ highlight SpellLocal term=underline cterm=underline
 set ruler
 " show line number
 set number
-set rnu
+
+" 相对行号: 行号变成相对，可以用 nj/nk 进行跳转
+set relativenumber number
+au FocusLost * :set norelativenumber number
+au FocusGained * :set relativenumber
+" 插入模式下用绝对行号, 普通模式下用相对
+autocmd InsertEnter * :set norelativenumber number
+autocmd InsertLeave * :set relativenumber
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber number
+  else
+    set relativenumber
+  endif
+endfunc
+nnoremap <C-n> :call NumberToggle()<cr>
+
+
 " 取消换行
 set nowrap
 " 显示输入的命令
@@ -154,6 +259,40 @@ set matchtime=2
 " Always show the status line - use 2 lines for the status bar
 set laststatus=2
 
+
+" 代码折叠
+set foldenable
+" 折叠方法
+" manual    手工折叠
+" indent    使用缩进表示折叠
+" expr      使用表达式定义折叠
+" syntax    使用语法定义折叠
+" diff      对没有更改的文本进行折叠
+" marker    使用标记进行折叠, 默认标记是 {{{ 和 }}}
+" set foldmethod=indent
+set foldmethod=indent
+set foldlevel=99
+" 代码折叠自定义快捷键 <leader>zz
+let g:FoldMethod = 0
+map <leader>zz :call ToggleFold()<cr>
+fun! ToggleFold()
+    if g:FoldMethod == 0
+        exe "normal! zM"
+        let g:FoldMethod = 1
+    else
+        exe "normal! zR"
+        let g:FoldMethod = 0
+    endif
+endfun
+
+" 缩进配置
+" Smart indent
+set smartindent
+" 打开自动缩进
+" never add copyindent, case error   " copy the previous indentation on autoindenting
+set autoindent
+
+
 " tab相关变更
 " 设置Tab键的宽度        [等同的空格个数]
 set tabstop=4
@@ -173,7 +312,6 @@ set shiftround
 " HotKey Settings  自定义快捷键设置
 "==========================================
 
-
 " 关闭方向键, 强迫自己用 hjkl
 map <Left> <Nop>
 map <Right> <Nop>
@@ -190,7 +328,7 @@ nnoremap gj j
 " Map ; to : and save a million keystrokes 用于快速进入命令行
 nnoremap ; :
 
-nmap <Leader>WQ :wa<CR>:q<CR>
+nmap <leader>WQ :wa<CR>:q<CR>
 " Quickly close the current window
 nnoremap <leader>q :q<CR>
 " Quickly save the current file
@@ -215,11 +353,11 @@ function! HideNumber()
     set number?
 endfunc
 " ,m 显示/隐藏行号
-nnoremap <Leader>m :call HideNumber()<CR>
+nnoremap <leader>m :call HideNumber()<CR>
 " ,l 换行开关
-nnoremap <Leader>l :set wrap! wrap?<CR>
+nnoremap <leader>' :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示
-nnoremap <Leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+nnoremap <leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
 
 " => 选中及操作改键
@@ -240,6 +378,83 @@ inoremap kj <Esc>
 " 滚动Speed up scrolling of the viewport slightly
 nnoremap <C-e> 2<C-e>
 nnoremap <C-y> 2<C-y>
+
+
+" 分屏窗口移动, Smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+
+" tab/buffer相关
+
+" 切换前后buffer
+" nnoremap [b :bprevious<cr>
+" nnoremap ]b :bnext<cr>
+" 使用方向键切换buffer
+" noremap <left> :bp<CR>
+" noremap <right> :bn<CR>
+
+" tab 操作
+" http://vim.wikia.com/wiki/Alternative_tab_navigation
+" http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
+
+" tab切换
+map <leader>th :tabfirst<cr>
+map <leader>tl :tablast<cr>
+
+map <leader>tj :tabnext<cr>
+map <leader>tk :tabprev<cr>
+map <leader>tn :tabnext<cr>
+map <leader>tp :tabprev<cr>
+
+map <leader>te :tabedit<cr>
+map <leader>td :tabclose<cr>
+map <leader>tm :tabm<cr>
+
+" normal模式下切换到确切的tab
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+" Toggles between the active and last active tab "
+" The first tab is always 1 "
+let g:last_active_tab = 1
+" nnoremap <leader>gt :execute 'tabnext ' . g:last_active_tab<cr>
+" nnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
+" vnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
+" nnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
+nnoremap <silent> <leader><space> :execute 'tabnext ' . g:last_active_tab<cr>
+autocmd TabLeave * let g:last_active_tab = tabpagenr()
+
+" 新建tab  Ctrl+t
+" nnoremap <C-t>     :tabnew<CR>
+" inoremap <C-t>     <Esc>:tabnew<CR>
+
+
+" http://stackoverflow.com/questions/13194428/is-better-way-to-zoom-windows-in-vim-than-zoomwin
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+nnoremap <silent> <Leader>z :ZoomToggle<CR>
 
 
 "==========================================
@@ -296,4 +511,25 @@ if has("autocmd")
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
   endif
 endif
+
+
+" 定义函数AutoSetFileHead，自动插入文件头
+autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
+function! AutoSetFileHead()
+    "如果文件类型为.sh文件
+    if &filetype == 'sh'
+        call setline(1, "\#!/bin/bash")
+    endif
+
+    "如果文件类型为python
+    if &filetype == 'python'
+        call setline(1, "\#!/usr/bin/env python")
+        " call append(1, "\# encoding: utf-8")
+        call setline(1, "\# -*- coding: utf-8 -*-")
+    endif
+
+    normal G
+    normal o
+    normal o
+endfunc
 
