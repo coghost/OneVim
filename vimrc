@@ -61,14 +61,11 @@ set noswapfile
 " 好处：误删什么的，如果以前屏幕打开，可以找回
 set t_ti= t_te=
 
-" 鼠标暂不启用, 键盘党....
-set mouse-=a
-
-" 启用鼠标
-" set mouse=a
+" 鼠标暂不启用, 键盘党..../ 启用鼠标
+" set mouse-=a
+set mouse=a
 " Hide the mouse cursor while typing
 " set mousehide
-
 
 " 开启实时搜索
 set incsearch
@@ -77,18 +74,18 @@ set hlsearch
 
 " 搜索相关
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
+" map <space> /
 " 进入搜索Use sane regexes"
 nnoremap / /\v
 vnoremap / /\v
 
 
 " Keep search pattern at the center of the screen.
-" nnoremap <silent> n nzz
-" nnoremap <silent> N Nzz
-" nnoremap <silent> * *zz
-" nnoremap <silent> # #zz
-" nnoremap <silent> g* g*zz
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
 
 " 去掉搜索高亮
 noremap <silent><leader>/ :nohls<CR>
@@ -248,7 +245,7 @@ set cursorcolumn
 " 突出显示当前行
 set cursorline
 " 上下移动光标, 最小保留行数
-set scrolloff=5
+set scrolloff=7
 
 " 括号配对情况, 跳转并高亮匹配的括号
 set showmatch
@@ -353,9 +350,9 @@ function! HideNumber()
     set number?
 endfunc
 " ,m 显示/隐藏行号
-nnoremap <leader>m :call HideNumber()<CR>
+" nnoremap <leader>m :call HideNumber()<CR>
 " ,l 换行开关
-nnoremap <leader>' :set wrap! wrap?<CR>
+" nnoremap <leader>' :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示
 nnoremap <leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
@@ -464,7 +461,7 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 set encoding=utf-8
 " 自动判断编码时，依次尝试以下编码：
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-set helplang=cn
+" set helplang=cn
 "set langmenu=zh_CN.UTF-8
 "set enc=2byte-gb18030
 " 下面这句只影响普通模式 (非图形界面) 下的 Vim
@@ -532,4 +529,3 @@ function! AutoSetFileHead()
     normal o
     normal o
 endfunc
-
