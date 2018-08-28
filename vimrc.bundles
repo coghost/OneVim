@@ -189,112 +189,123 @@ call plug#end()
 
 
 " #################### statubar ####################
-" lightline: itchyny/lightline.vim
-let g:lightline = {
-            \ 'colorscheme': 'powerline',
-            \ 'active': {
-            \   'left': [[ 'mode', 'paste' ],
-            \            [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
-            \            [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-            \   'right': [[ 'lineinfo' ],
-            \             [ 'percent' ],
-            \             [ 'filetype', 'charvaluehex' ]]
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'gitbranch#name'
-            \ },
-            \ }
+"{{{ lightline: itchyny/lightline.vim
+if has_key(g:plugs, 'lightline.vim')
+    let g:lightline = {
+                \ 'colorscheme': 'powerline',
+                \ 'active': {
+                \   'left': [[ 'mode', 'paste' ],
+                \            [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
+                \            [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+                \   'right': [[ 'lineinfo' ],
+                \             [ 'percent' ],
+                \             [ 'filetype', 'charvaluehex' ]]
+                \ },
+                \ 'component_function': {
+                \   'gitbranch': 'gitbranch#name'
+                \ },
+                \ }
 
-let g:lightline.component_type = {
-            \     'linter_checking': 'left',
-            \     'linter_warnings': 'warning',
-            \     'linter_errors': 'error',
-            \     'linter_ok': 'left',
-            \ }
+    let g:lightline.component_type = {
+                \     'linter_checking': 'left',
+                \     'linter_warnings': 'warning',
+                \     'linter_errors': 'error',
+                \     'linter_ok': 'left',
+                \ }
+endif
+" }}}
 
 " #################### rainbow_parentheses ####################
 " rainbow_parentheses {{{
 " kien/rainbow_parentheses.vim
-let g:rbpt_colorpairs = [
-            \ ['brown',       'RoyalBlue3'],
-            \ ['Darkblue',    'SeaGreen3'],
-            \ ['darkgray',    'DarkOrchid3'],
-            \ ['darkgreen',   'firebrick3'],
-            \ ['darkcyan',    'RoyalBlue3'],
-            \ ['darkred',     'SeaGreen3'],
-            \ ['darkmagenta', 'DarkOrchid3'],
-            \ ['brown',       'firebrick3'],
-            \ ['gray',        'RoyalBlue3'],
-            \ ['black',       'SeaGreen3'],
-            \ ['darkmagenta', 'DarkOrchid3'],
-            \ ['Darkblue',    'firebrick3'],
-            \ ['darkgreen',   'RoyalBlue3'],
-            \ ['darkcyan',    'SeaGreen3'],
-            \ ['darkred',     'DarkOrchid3'],
-            \ ['red',         'firebrick3'],
-            \ ]
+if has_key(g:plugs, 'rainbow_parentheses.vim')
+    let g:rbpt_colorpairs = [
+                \ ['brown',       'RoyalBlue3'],
+                \ ['Darkblue',    'SeaGreen3'],
+                \ ['darkgray',    'DarkOrchid3'],
+                \ ['darkgreen',   'firebrick3'],
+                \ ['darkcyan',    'RoyalBlue3'],
+                \ ['darkred',     'SeaGreen3'],
+                \ ['darkmagenta', 'DarkOrchid3'],
+                \ ['brown',       'firebrick3'],
+                \ ['gray',        'RoyalBlue3'],
+                \ ['black',       'SeaGreen3'],
+                \ ['darkmagenta', 'DarkOrchid3'],
+                \ ['Darkblue',    'firebrick3'],
+                \ ['darkgreen',   'RoyalBlue3'],
+                \ ['darkcyan',    'SeaGreen3'],
+                \ ['darkred',     'DarkOrchid3'],
+                \ ['red',         'firebrick3'],
+                \ ]
 
-let g:rbpt_max = 16
-let g:rbpt_loadcmd_toggle = 0
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+    let g:rbpt_max = 16
+    let g:rbpt_loadcmd_toggle = 0
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
+endif
 " }}}
 
 
 " #################### nerdtree ####################
 " nerdtree nerdtreetabs {{{
-" map <leader>n :NERDTreeToggle<CR>
-let NERDTreeHighlightCursorline=1
-let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
-"close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
-" s/v 分屏打开文件
-let g:NERDTreeMapOpenSplit = 's'
-let g:NERDTreeMapOpenVSplit = 'v'
+if has_key(g:plugs, 'vim-nerdtree-tabs')
+    " map <leader>n :NERDTreeToggle<CR>
+    let NERDTreeHighlightCursorline=1
+    let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
+    "close vim if the only window left open is a NERDTree
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
+    " s/v 分屏打开文件
+    let g:NERDTreeMapOpenSplit = 's'
+    let g:NERDTreeMapOpenVSplit = 'v'
 
-" nerdtreetabs
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-" 关闭同步
-" let g:nerdtree_tabs_synchronize_view=0
-" let g:nerdtree_tabs_synchronize_focus=0
-" 是否自动开启nerdtree
-let g:nerdtree_tabs_open_on_console_startup=0
-let g:nerdtree_tabs_open_on_gui_startup=0
-
+    " nerdtreetabs
+    map <Leader>n <plug>NERDTreeTabsToggle<CR>
+    " 关闭同步
+    " let g:nerdtree_tabs_synchronize_view=0
+    " let g:nerdtree_tabs_synchronize_focus=0
+    " 是否自动开启nerdtree
+    let g:nerdtree_tabs_open_on_console_startup=0
+    let g:nerdtree_tabs_open_on_gui_startup=0
+endif
 " }}}
 
 
 " #################### nerdtree-git-plugin ####################
 " nerdtree git plugin {{{
-let g:NERDTreeIndicatorMapCustom = {
-            \ "Modified"  : "",
-            \ "Staged"    : "✚",
-            \ "Untracked" : "✭",
-            \ "Renamed"   : "➜",
-            \ "Unmerged"  : "═",
-            \ "Deleted"   : "✖",
-            \ "Dirty"     : "✗",
-            \ "Clean"     : "✔︎",
-            \ 'Ignored'   : '☒',
-            \ "Unknown"   : "?"
-            \ }
+if has_key(g:plugs, 'nerdtree-git-plugin')
+    let g:NERDTreeIndicatorMapCustom = {
+                \ "Modified"  : "",
+                \ "Staged"    : "✚",
+                \ "Untracked" : "✭",
+                \ "Renamed"   : "➜",
+                \ "Unmerged"  : "═",
+                \ "Deleted"   : "✖",
+                \ "Dirty"     : "✗",
+                \ "Clean"     : "✔︎",
+                \ 'Ignored'   : '☒',
+                \ "Unknown"   : "?"
+                \ }
+endif
 " }}}
 
 
-" 标签导航
+" #################### 标签导航 ####################
 " tagbar {{{
-nmap <F9> :TagbarToggle<CR>
-" let tagbar_left=1
-" let tagbar_width=32
-" let g:tagbar_compact=1
-let g:tagbar_autofocus = 1
-" let g:tagbar_autoshowtag = 1
-" let g:tagbar_show_visibility = 1
+if has_key(g:plugs, 'tagbar')
+    nmap <F9> :TagbarToggle<CR>
+    " let tagbar_left=1
+    " let tagbar_width=32
+    " let g:tagbar_compact=1
+    let g:tagbar_autofocus = 1
+    " let g:tagbar_autoshowtag = 1
+    " let g:tagbar_show_visibility = 1
+endif
 " }}}
 
 
+" #################### ale ####################
 " ale {{{
 if has_key(g:plugs, 'ale')
     " pip install flake8
@@ -387,29 +398,32 @@ endif
 
 " #################### Syntastic ####################
 " Syntastic {{{
-" Syntastic ------------------------------
-" show list of errors and warnings on the current file
-" nmap <leader>e :Errors<CR>
-" check also when just opened the file
-" let g:syntastic_check_on_open = 1
-" don't put icons on the sign column (it hides the vcs status icons of signify)
-" let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous
-" setting)
-" let g:syntastic_error_symbol = '✗'
-" let g:syntastic_warning_symbol = '⚠'
-" let g:syntastic_style_error_symbol = '✗'
-" let g:syntastic_style_warning_symbol = '⚠'
-
+if has_key(g:plugs, 'syntastic')
+    " Syntastic ------------------------------
+    " show list of errors and warnings on the current file
+    " nmap <leader>e :Errors<CR>"
+    " check also when just opened the file
+    let g:syntastic_check_on_open = 1
+    " don't put icons on the sign column (it hides the vcs status icons of signify)
+    let g:syntastic_enable_signs = 0
+    " custom icons (enable them if you use a patched font, and enable the previous
+    " setting)
+    let g:syntastic_error_symbol = '✗'
+    let g:syntastic_warning_symbol = '⚠'
+    let g:syntastic_style_error_symbol = '✗'
+    let g:syntastic_style_warning_symbol = '⚠'
+endif
 " }}}
 
 " #################### indentLine ####################
 " indentLine {{{
-" let g:indentLine_setColors = 0
-" let g:indentLine_color_dark = 1
-" let g:indentLine_concealcursor = 'inc'
-" let g:indentLine_conceallevel = 2
-
+if has_key(g:plugs, 'indentLine')
+    " let g:indentLine_setColors = 0
+    let g:indentLine_char = '┆'
+    let g:indentLine_color_dark = 1
+    let g:indentLine_concealcursor = 'inc'
+    let g:indentLine_conceallevel = 2
+endif
 " }}}
 
 " #################### Autoformat ####################
@@ -453,7 +467,7 @@ if has_key(g:plugs, 'YouCompleteMe')
     " 回车作为选中
     let g:ycm_key_list_stop_completion = ['<CR>']
 
-    let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+    let g:ycm_seed_identifiers_with_syntax=0   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
 
     " 跳转到定义处, 分屏打开
     let g:ycm_goto_buffer_command = 'horizontal-split'
@@ -471,10 +485,10 @@ if has_key(g:plugs, 'YouCompleteMe')
     " 直接触发自动补全 insert模式下
     " let g:ycm_key_invoke_completion = '<C-Space>'
     " 黑名单,不启用
-    let g:ycm_filetype_blacklist = {
-        \ 'tagbar' : 1,
-        \ 'gitcommit' : 1,
-        \}
+    "let g:ycm_filetype_blacklist = {
+    "    \ 'tagbar' : 1,
+    "    \ 'gitcommit' : 1,
+    "    \}
 endif
 " }}}
 
@@ -558,7 +572,7 @@ if has_key(g:plugs, 'vim-signify')
 endif
 " }}}
 
-" ####################  ####################
+" #################### vim-gitgutter ####################
 if has_key(g:plugs, 'vim-gitgutter')
     let g:gitgutter_grep = 'ag'
     set updatetime=3000
@@ -567,11 +581,14 @@ endif
 " }}}
 
 
+" #################### vim-multiple-cursors ####################
 " multiplecursors {{{
+if has_key(g:plugs, 'vim-multiple-cursors')
     let g:multi_cursor_use_default_mapping=0
     " Default mapping
     let g:multi_cursor_next_key='<C-m>'
     let g:multi_cursor_prev_key='<C-p>'
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<Esc>'
+endif
 " }}}
