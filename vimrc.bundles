@@ -161,7 +161,7 @@ Plug 'bronson/vim-trailing-whitespace'
 " ------------- sort python import, not used -------------
 " Plug 'fisadev/vim-isort' "
 " yapf 格式化
-Plug 'pignacio/vim-yapf-format'
+" Plug 'pignacio/vim-yapf-format'
 
 " ----------------------------------------------------------------
 " quick run: 快速运行代码

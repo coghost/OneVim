@@ -23,7 +23,7 @@ endif
 set history=2000
 
 " use system clipboard
-set clipboard=unnamed
+set clipboard+=unnamed
 
 " 配置变更立即生效
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
@@ -350,9 +350,9 @@ function! HideNumber()
     set number?
 endfunc
 " ,m 显示/隐藏行号
-" nnoremap <leader>m :call HideNumber()<CR>
+nnoremap <leader>m :call HideNumber()<CR>
 " ,l 换行开关
-" nnoremap <leader>' :set wrap! wrap?<CR>
+nnoremap <leader>l :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示
 nnoremap <leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
@@ -486,6 +486,7 @@ autocmd FileType ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtab
 autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
 autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
+autocmd BufRead,BufNewFile *rc set filetype=sh
 
 " for # indent, python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
