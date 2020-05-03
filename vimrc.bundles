@@ -39,6 +39,7 @@ call plug#begin('~/.vim/bundle')
 " ----------------------------------------------------------------
 Plug 'joshdick/onedark.vim'
 Plug 'chriskempson/base16-vim'
+Plug 'lifepillar/vim-solarized8'
 
 " ----------------------------------------------------------------
 " nav

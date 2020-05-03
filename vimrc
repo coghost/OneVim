@@ -189,7 +189,9 @@ let base16colorspace=256
 set termguicolors
 " colorscheme molokai
 " colorscheme onedark
-colorscheme base16-default-dark
+" colorscheme solarized
+colorscheme solarized8
+" colorscheme base16-default-dark
 
 " TODO: 理解如下定义作用
 " 设置标记一列的背景颜色和数字一行颜色一致
@@ -486,7 +488,7 @@ autocmd FileType ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtab
 autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
 autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
-autocmd BufRead,BufNewFile *rc set filetype=sh
+" autocmd BufRead,BufNewFile *rc set filetype=sh
 
 " for # indent, python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
