@@ -40,6 +40,8 @@ call plug#begin('~/.vim/bundle')
 Plug 'joshdick/onedark.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'lifepillar/vim-solarized8'
+Plug 'hzchirs/vim-material'
+Plug 'kaicataldo/material.vim'
 
 " ----------------------------------------------------------------
 " nav
@@ -162,7 +164,7 @@ Plug 'bronson/vim-trailing-whitespace'
 " ------------- sort python import, not used -------------
 " Plug 'fisadev/vim-isort' "
 " yapf 格式化
-" Plug 'pignacio/vim-yapf-format'
+Plug 'pignacio/vim-yapf-format'
 
 " ----------------------------------------------------------------
 " quick run: 快速运行代码
@@ -191,9 +193,10 @@ call plug#end()
 
 " #################### statubar ####################
 "{{{ lightline: itchyny/lightline.vim
+"\ 'colorscheme': 'powerline',
 if has_key(g:plugs, 'lightline.vim')
     let g:lightline = {
-                \ 'colorscheme': 'powerline',
+                \ 'colorscheme': 'material_vim',
                 \ 'active': {
                 \   'left': [[ 'mode', 'paste' ],
                 \            [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'],
@@ -591,5 +594,15 @@ if has_key(g:plugs, 'vim-multiple-cursors')
     let g:multi_cursor_prev_key='<C-p>'
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<Esc>'
+endif
+" }}}
+
+
+" #################### material.vim ####################
+" multiplecursors {{{
+if has_key(g:plugs, 'material.vim')
+    let g:material_theme_style = 'default'
+    let g:material_terminal_italics = 1
+    " Default mapping
 endif
 " }}}

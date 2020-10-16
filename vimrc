@@ -190,7 +190,9 @@ set termguicolors
 " colorscheme molokai
 " colorscheme onedark
 " colorscheme solarized
-colorscheme solarized8
+" colorscheme solarized8
+colorscheme material
+" colorscheme vim-material
 " colorscheme base16-default-dark
 
 " TODO: 理解如下定义作用
