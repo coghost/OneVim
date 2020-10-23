@@ -6,22 +6,23 @@ if !exists('g:bundle_groups')
 endif
 
 
-function HeavyWeight() abort
+function! HeavyWeight() abort
     Plug 'easymotion/vim-easymotion'
-    Plug 'airblade/vim-gitgutter'
 endfunction
 
-function EnableAirlineFamily() abort
+function! EnableAirlineFamily() abort
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
 
     Plug 'tpope/vim-fugitive'
     Plug 'bling/vim-bufferline'
     Plug 'jmcantrell/vim-virtualenv'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'APZelos/blamer.nvim'
 endfunction
 
 
-function EnableLightline() abort
+function! EnableLightline() abort
     Plug 'kaicataldo/material.vim', { 'branch': 'main' }
     Plug 'itchyny/lightline.vim'
     Plug 'itchyny/vim-gitbranch'
@@ -29,7 +30,7 @@ function EnableLightline() abort
 endfunction
 
 
-function EnableNerdFamily() abort
+function! EnableNerdFamily() abort
     " ========== navigation ==========
     Plug 'jistr/vim-nerdtree-tabs'
     Plug 'scrooloose/nerdtree'
@@ -37,7 +38,7 @@ function EnableNerdFamily() abort
 endfunction
 
 
-function EnableUiRelated() abort
+function! EnableUiRelated() abort
     " ========== themes ==========
     Plug 'hzchirs/vim-material'
     Plug 'joshdick/onedark.vim'
@@ -52,21 +53,23 @@ function EnableUiRelated() abort
 endfunction
 
 
-function WorkEfficiency() abort
+function! WorkEfficiency() abort
     Plug 'justinmk/vim-sneak'
     Plug 'tpope/vim-surround'
     Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+    Plug 'yilin-yang/vim-markbar'
+    Plug 'ntpeters/vim-better-whitespace'
 endfunction
 
 
-function TypingMode() abort
+function! TypingMode() abort
     Plug 'junegunn/goyo.vim'
     Plug 'junegunn/limelight.vim'
 endfunction
 
 
-function WorkAsynchronous() abort
-    " TODO: read https://github.com/junegunn/fzf.vim
+function! WorkAsynchronous() abort
+    " INFO: read https://github.com/junegunn/fzf.vim
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'prabirshrestha/vim-lsp'
@@ -75,16 +78,15 @@ function WorkAsynchronous() abort
 endfunction
 
 
-function PythonDedicated() abort
-    " python
-    Plug 'jeetsukumaran/vim-pythonsense'
+function! PythonDedicated() abort
     " Syntax highlighting
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-    Plug 'Vimjas/vim-python-pep8-indent'
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
 endfunction
 
 
-function Assistance() abort
+function! Assistance() abort
     " translation
     Plug 'voldikss/vim-translator'
 endfunction
@@ -109,6 +111,7 @@ call plug#end()
 " Plugin configuration
 " ============================================================================
 
+
 " --------------------------------------------------
 " startify
 " --------------------------------------------------
@@ -118,10 +121,10 @@ endif
 
 
 " --------------------------------------------------
-" vim-sneak 
+" vim-sneak
 " --------------------------------------------------
 if has_key(g:plugs, 'vim-sneak')
-    " let g:sneak#label = 1 
+    " let g:sneak#label = 1
     nmap = <Plug>Sneak_;
     omap = <Plug>Sneak_;
     xmap = <Plug>Sneak_;
@@ -132,7 +135,33 @@ endif
 
 
 " --------------------------------------------------
-" lightline 
+" vim-markbar
+" --------------------------------------------------
+if has_key(g:plugs, 'vim-markbar')
+    nmap <Leader>m <Plug>ToggleMarkbar
+endif
+
+
+" --------------------------------------------------
+" vim-better-whitespace
+" --------------------------------------------------
+if has_key(g:plugs, 'vim-better-whitespace')
+    let g:better_whitespace_enabled=1
+    let g:strip_whitespace_on_save=1
+    let g:strip_whitespace_confirm=0
+    let g:strip_whitelines_at_eof=1
+    let g:show_spaces_that_precede_tabs=1
+    let g:better_whitespace_verbosity=1
+
+    let g:strip_only_modified_lines=1
+    nnoremap ]w :NextTrailingWhitespace<CR>
+    nnoremap [w :PrevTrailingWhitespace<CR>
+    autocmd FileType python,javascript,c,cpp,ruby EnableStripWhitespaceOnSave
+endif
+
+
+" --------------------------------------------------
+" lightline
 " --------------------------------------------------
 if has_key(g:plugs, 'lightline')
     let g:lightline = {
@@ -171,25 +200,69 @@ if has_key(g:plugs, 'lightline')
     let g:lightline#ale#indicator_errors = "\uf05e"
     let g:lightline#ale#indicator_ok = "\uf00c"
 endif
-" }}}
 
 
 " --------------------------------------------------
 " vim-gitgutter
 " --------------------------------------------------
 if has_key(g:plugs, 'vim-gitgutter')
-    let g:gitgutter_grep = 'ag'
-    set updatetime=500
-    let g:gitgutter_max_signs = 100  " default value (Vim < 8.1.0614, Neovim < 0.4.0)
+    let g:gitgutter_grep = 'rg'
+    set updatetime=100
     let g:gitgutter_max_signs = -1   " default value (otherwise)
-    " Your vimrc
+    let _sign = '▌'
+    let g:gitgutter_sign_added = _sign
+    let g:gitgutter_sign_modified = _sign
+    let g:gitgutter_sign_removed = _sign
+    let g:gitgutter_sign_removed_first_line = _sign
+    let g:gitgutter_sign_removed_above_and_below = '{'
+    let g:gitgutter_sign_modified_removed = ''
+
+    " if I want to use another git-plugin
+    " let g:gitgutter_sign_allow_clobber = 1
+
+    let g:gitgutter_highlight_lines = 0
+    let g:gitgutter_highlight_linenrs = 1
+    let g:gitgutter_preview_win_floating = 1
+    let g:gitgutter_use_location_list = 1
+
     function! GitStatus()
         let [a,m,r] = GitGutterGetHunkSummary()
         return printf('+%d ~%d -%d', a, m, r)
     endfunction
     set statusline+=%{GitStatus()}
+
+    nmap <leader>ghhs <Plug>(GitGutterStageHunk)
+    nmap <leader>gs <Plug>(GitGutterPreviewHunk)
+    nmap <leader>gu <Plug>(GitGutterUndoHunk)
+    " in case press c twice
+    nmap ]n <Plug>(GitGutterNextHunk)
+    nmap [n <Plug>(GitGutterPrevHunk)
+    " nmap <leader>glt <Plug>(GitGutterLineHighlightsToggle)<cr>
+
+    highlight link GitGutterChangeLine DiffText
+    highlight link GitGutterChangeLineNr Underlined
 endif
 
+
+" --------------------------------------------------
+" blamer
+" --------------------------------------------------
+if has_key(g:plugs, 'blamer.nvim')
+    let g:blamer_enabled = 1
+    let g:blamer_delay = 500
+    let g:blamer_show_in_insert_modes = 0
+    let g:blamer_prefix = '  『  '
+    " let g:blamer_prefix = '     '
+    let g:blamer_template = '<committer>, <committer-time> • <summary>』'
+    let g:blamer_date_format = '%Y/%m/%d %H:%M'
+    " let g:blamer_relative_time = 1
+    highlight Blamer guifg=lightgrey
+endif
+
+
+" --------------------------------------------------
+" vim-easymotion
+" --------------------------------------------------
 if has_key(g:plugs, 'vim-easymotion')
     let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
@@ -209,6 +282,10 @@ if has_key(g:plugs, 'vim-easymotion')
     map <Leader>k <Plug>(easymotion-k)
 endif
 
+
+" --------------------------------------------------
+" goyo.vim
+" --------------------------------------------------
 if has_key(g:plugs, 'goyo.vim')
     function! s:goyo_enter()
         if executable('tmux') && strlen($TMUX)
@@ -235,10 +312,13 @@ if has_key(g:plugs, 'goyo.vim')
     endfunction
 
     autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    autocmd! User GoyoLeave nested call <SID>goyo_leave() 
+    autocmd! User GoyoLeave nested call <SID>goyo_leave()
 endif
 
 
+" --------------------------------------------------
+" limelight
+" --------------------------------------------------
 if has_key(g:plugs, 'limelight')
     " Color name (:help cterm-colors) or ANSI code
     let g:limelight_conceal_ctermfg = 'gray'
@@ -262,15 +342,18 @@ if has_key(g:plugs, 'limelight')
 
     " Highlighting priority (default: 10)
     "   Set it to -1 not to overrule hlsearch
-    let g:limelight_priority = -1 
+    let g:limelight_priority = -1
     autocmd! User GoyoEnter Limelight
     autocmd! User GoyoLeave Limelight!
     " nmap <space>l <Plug>(Limelight)
     " xmap <space>l <Plug>(Limelight)
-    nnoremap <silent><nowait> <space>l  <Plug>(Limelight)
+    " nnoremap <silent><nowait> <space>l  <Plug>(Limelight)
 endif
 
 
+" --------------------------------------------------
+" vim-translator
+" --------------------------------------------------
 if has_key(g:plugs, 'vim-translator')
     " Echo translation in the cmdline
     nmap <silent> <space>tr <Plug>Translate
@@ -288,8 +371,10 @@ if has_key(g:plugs, 'vim-translator')
     " nmap <silent> <space>x <Plug>TranslateX
 endif
 
-" ==================== nerdtree ====================
-" nerdtree nerdtreetabs {{{
+
+" --------------------------------------------------
+" vim-nerdtree-tabs
+" --------------------------------------------------
 if has_key(g:plugs, 'vim-nerdtree-tabs')
     " map <leader>n :NERDTreeToggle<CR>
     let NERDTreeHighlightCursorline=1
@@ -309,10 +394,11 @@ if has_key(g:plugs, 'vim-nerdtree-tabs')
     let g:nerdtree_tabs_open_on_console_startup=0
     let g:nerdtree_tabs_open_on_gui_startup=0
 endif
-" }}}
 
-" ==================== nerdtree-git-plugin ====================
-" nerdtree git plugin {{{
+
+" --------------------------------------------------
+" nerdtree-git-plugin
+" --------------------------------------------------
 if has_key(g:plugs, 'nerdtree-git-plugin')
     let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ "Modified"  : "",
@@ -327,10 +413,11 @@ if has_key(g:plugs, 'nerdtree-git-plugin')
                 \ "Unknown"   : "?"
                 \ }
 endif
-" }}}
 
-" #################### rainbow_parentheses ####################
-" rainbow_parentheses {{{
+
+" --------------------------------------------------
+" rainbow_parentheses.vim
+" --------------------------------------------------
 if has_key(g:plugs, 'rainbow_parentheses.vim')
     let g:rbpt_colorpairs = [
                 \ ['brown',       'RoyalBlue3'],
@@ -358,18 +445,19 @@ if has_key(g:plugs, 'rainbow_parentheses.vim')
     au Syntax * RainbowParenthesesLoadSquare
     au Syntax * RainbowParenthesesLoadBraces
 endif
-" }}}
 
 
-" ==================== rainbow ====================
-" rainbow {{{
+" --------------------------------------------------
+" rainbow
+" --------------------------------------------------
 if has_key(g:plugs, 'rainbow')
     let g:rainbow_active = 1
 endif
-" }}}
 
-" #################### indentLine ####################
-" indentLine {{{
+
+" --------------------------------------------------
+" indentLine
+" --------------------------------------------------
 if has_key(g:plugs, 'indentLine')
     let g:indentLine_setColors = 0
     let g:indentLine_char = '┆'
@@ -378,13 +466,14 @@ if has_key(g:plugs, 'indentLine')
     let g:indentLine_conceallevel = 2
     let g:indentLine_faster             = 1
     let g:indentLine_leadingSpaceChar   = '·'
-    " let g:indentLine_fileTypeExclude    = ['json',  'startify', '', 'help', 'coc-explorer']
-    " let g:indentLine_setConceal = 0
+    let g:indentLine_fileTypeExclude    = ['json',  'startify', '', 'help', 'coc-explorer']
+    let g:indentLine_setConceal = 0
 endif
-" }}}
 
-" ==================== vim-airline ====================
-" vim-airline {{{
+
+" --------------------------------------------------
+" vim-airline
+" --------------------------------------------------
 if has_key(g:plugs, 'vim-airline')
     " let g:airline_section_b = '%{strftime("%c")}'
     let g:airline#extensions#tabline#enabled = 1
@@ -416,10 +505,11 @@ if has_key(g:plugs, 'vim-airline')
     nmap <leader>8 <Plug>AirlineSelectTab8
     nmap <leader>9 <Plug>AirlineSelectTab9
 endif
-" }}}
 
-" ==================== vista.vim ====================
-" vista.vim {{{
+
+" --------------------------------------------------
+" vista.vim
+" --------------------------------------------------
 if has_key(g:plugs, 'vista.vim')
     nmap <F9> :Vista!!<CR>
 
@@ -436,7 +526,7 @@ if has_key(g:plugs, 'vista.vim')
                 \ 'php': 'vim_lsp',
                 \ 'python': 'coc',
                 \ }
-    let g:vista_fzf_preview = ['right:50%']
+    " let g:vista_fzf_preview = ['right:50%']
 
     " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
     let g:vista#renderer#icons = {
@@ -446,12 +536,26 @@ if has_key(g:plugs, 'vista.vim')
     " let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
     let g:vista_icon_indent = ["▸ ", ""]
 endif
-" }}}
 
 
+" --------------------------------------------------
+" fzf
+" --------------------------------------------------
 if has_key(g:plugs, 'fzf')
+    " INFO: https://github.com/junegunn/fzf.vim/issues/453
+    " export FZF_DEFAULT_COMMAND='fd --type f'
     let $FZF_DEFAULT_OPTS = '--reverse'
     let $BAT_THEME = 'OneHalfDark'
+    let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+
+    let g:fzf_buffers_jump = 1
+    let g:fzf_commits_log_options = "--color --graph --date=format:'%m/%d %H:%M' --pretty=format:'%C(yellow)%h%Creset%C(red)%d%Creset %s %Cred『%C(bold blue)%an, %Cgreen%cd%Cred』%Creset'"
+
+    " command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, <bang>0)
+    command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+    " INFO: https://github.com/junegunn/fzf.vim/pull/819
+    " command! -bang -nargs=? -complete=dir Files
+    "             \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'source': 'rg --files --no-ignore-vcs'}), <bang>0)
     let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
 
     command! -bang -nargs=* Rg
@@ -489,9 +593,21 @@ if has_key(g:plugs, 'fzf')
         call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
         au BufWipeout <buffer> exe 'bw '.s:buf
     endfunction
-    nnoremap <C-p> :GFiles<cr>
-    nnoremap <S-S> :GFiles<cr>
+
+    function! RipgrepFzf(query, fullscreen)
+        let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+        let initial_command = printf(command_fmt, shellescape(a:query))
+        let reload_command = printf(command_fmt, '{q}')
+        let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+        call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    endfunction
+    command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
+
+    nnoremap <silent> <C-\> :Rg<cr>
+    nnoremap <silent> <Space>f :Files<cr>
+    nnoremap <silent> <Space>g :GFiles<cr>
 endif
+
 
 " --------------------------------------------------
 " semshi
@@ -506,41 +622,96 @@ if has_key(g:plugs, 'semshi')
     nmap <silent> <leader>f :Semshi goto function next<CR>
     nmap <silent> <leader>F :Semshi goto function prev<CR>
 
-    " nmap <silent> <leader>gu :Semshi goto unresolved first<CR>
-    " nmap <silent> <leader>gp :Semshi goto parameterUnused first<CR>
-    " nmap <silent> <leader>ee :Semshi error<CR>
-    " nmap <silent> <leader>ge :Semshi goto error<CR>
-
-    " hi semshiLocal           ctermfg=209 guifg=#ff875f
-    " hi semshiGlobal          ctermfg=214 guifg=#ffaf00
-    " hi semshiImported        ctermfg=214 guifg=#ffaf00 cterm=bold gui=bold
-    " hi semshiParameter       ctermfg=75  guifg=#5fafff
-    " hi semshiParameterUnused ctermfg=117 guifg=#87d7ff cterm=underline gui=underline
-    " hi semshiFree            ctermfg=218 guifg=#ffafd7
-    " hi semshiBuiltin         ctermfg=207 guifg=#ff5fff
-    " hi semshiAttribute       ctermfg=49  guifg=#00ffaf
-    " hi semshiSelf            ctermfg=249 guifg=#b2b2b2
-    " hi semshiUnresolved      ctermfg=226 guifg=#ffff00 cterm=underline gui=underline
-    " hi semshiSelected        ctermfg=231 guifg=#ffffff ctermbg=161 guibg=#d7005f
-
-    " hi semshiErrorSign       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
-    " hi semshiErrorChar       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
-    " sign define semshiError text=E> texthl=semshiErrorSign
-    let g:semshi#filetypes = ['python']
-    let g:semshi#mark_selected_nodes = 1
+    let g:semshi#filetypes = ['python', 'vimscript']
 endif
-" }}}
 
+" --------------------------------------------------
+" vim-snippets
+" --------------------------------------------------
+if has_key(g:plugs, 'vim-snippets')
+    let g:ultisnips_python_style = 'google'
+endif
+
+" --------------------------------------------------
+" coc-git
+" --------------------------------------------------
+function! CustomCocGit() abort
+    echo "loaded CustomCocGit"
+    set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
+    autocmd User CocGitStatusChange {command}
+    " navigate chunks of current buffer
+    nmap [n <Plug>(coc-git-prevchunk)
+    nmap ]n <Plug>(coc-git-nextchunk)
+    nmap gs <Plug>(coc-git-chunkinfo)
+    nmap gh <Plug>(coc-git-commit)
+    nnoremap <silent> <space>g :<C-u>CocList --normal gstatus<CR>
+endfunction
+
+
+" --------------------------------------------------
+" coc-explorer
+" --------------------------------------------------
+function! CustomCocExplorer() abort
+    let g:coc_explorer_global_presets = {
+    \   '.vim': {
+    \     'root-uri': '~/.vim',
+    \   },
+    \   'tab': {
+    \     'position': 'tab',
+    \     'quit-on-open': v:true,
+    \   },
+    \   'floating': {
+    \     'position': 'floating',
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingTop': {
+    \     'position': 'floating',
+    \     'floating-position': 'center-top',
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingLeftside': {
+    \     'position': 'floating',
+    \     'floating-position': 'left-center',
+    \     'floating-width': 50,
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingRightside': {
+    \     'position': 'floating',
+    \     'floating-position': 'right-center',
+    \     'floating-width': 50,
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'simplify': {
+    \     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+    \   }
+    \ }
+    " Use preset argument to open it
+    nmap <leader>ed :CocCommand explorer --preset .vim<CR>
+    nmap <leader>ef :CocCommand explorer --preset floating<CR>
+
+    " List all presets
+    nmap <leader>el :CocList explPresets<CR>
+endfunction
+
+
+function CustomCocPyright() abort
+endfunction
+
+" --------------------------------------------------
+" coc.vim
+" --------------------------------------------------
 if has_key(g:plugs, 'coc.nvim')
+    " \ 'coc-git',
+    " \ 'coc-python',
+    " \ 'coc-pyright',
     let g:coc_global_extensions = [
                 \ 'coc-explorer',
                 \ 'coc-flutter-tools',
-                \ 'coc-git',
                 \ 'coc-highlight',
                 \ 'coc-json',
                 \ 'coc-markdownlint',
                 \ 'coc-pairs',
-                \ 'coc-python',
+                \ 'coc-pyright',
                 \ 'coc-sh',
                 \ 'coc-snippets',
                 \ 'coc-syntax',
@@ -555,7 +726,7 @@ if has_key(g:plugs, 'coc.nvim')
     set cmdheight=2
 
     " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-    set updatetime=300
+    set updatetime=100
 
     " Don't pass messages to |ins-completion-menu|.
     set shortmess+=c
@@ -572,28 +743,16 @@ if has_key(g:plugs, 'coc.nvim')
     " Use tab for trigger completion with characters ahead and navigate.
     " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
     " other plugin before putting this into your config.
-    inoremap <silent><expr> <TAB>
-                \ pumvisible() ? "\<C-n>" :
-                \ <SID>check_back_space() ? "\<TAB>" :
-                \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    " inoremap <silent><expr> <TAB>
+    "             \ pumvisible() ? "\<C-n>" :
+    "             \ <SID>check_back_space() ? "\<TAB>" :
+    "             \ coc#refresh()
+    " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
     function! s:check_back_space() abort
         let col = col('.') - 1
         return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
-
-    " Use <c-space> to trigger completion.
-    if has('nvim')
-        inoremap <silent><expr> <c-space> coc#refresh()
-    else
-        inoremap <silent><expr> <c-@> coc#refresh()
-    endif
-
-    " Make <CR> auto-select the first completion item and notify coc.nvim to
-    " format on enter, <cr> could be remapped by other vim plugin
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
     " Use `[g` and `]g` to navigate diagnostics
     " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -626,50 +785,19 @@ if has_key(g:plugs, 'coc.nvim')
     nmap <leader>rn <Plug>(coc-rename)
 
     " Formatting selected code.
-    xmap <leader>f  <Plug>(coc-format-selected)
-    nmap <leader>f  <Plug>(coc-format-selected)
+    " xmap <leader>f  <Plug>(coc-format-selected)
+    " nmap <leader>f  <Plug>(coc-format-selected)
     autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'setup.cfg', 'setup.py', 'pyproject.toml']
+
     augroup mygroup
         autocmd!
         " Setup formatexpr specified filetype(s).
-        autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+        " autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
         " Update signature help on jump placeholder.
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
     augroup end
 
-    " hi CocHighlightText guibg=#556873 gui=bold
-
-    " Applying codeAction to the selected region.
-    " Example: `<leader>aap` for current paragraph
-    xmap <leader>a  <Plug>(coc-codeaction-selected)
-    nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-    " Remap keys for applying codeAction to the current buffer.
-    nmap <leader>ac  <Plug>(coc-codeaction)
-    " Apply AutoFix to problem on the current line.
-    nmap <leader>qf  <Plug>(coc-fix-current)
-
-    " Map function and class text objects
-    " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-    xmap if <Plug>(coc-funcobj-i)
-    omap if <Plug>(coc-funcobj-i)
-    xmap af <Plug>(coc-funcobj-a)
-    omap af <Plug>(coc-funcobj-a)
-    xmap ic <Plug>(coc-classobj-i)
-    omap ic <Plug>(coc-classobj-i)
-    xmap ac <Plug>(coc-classobj-a)
-    omap ac <Plug>(coc-classobj-a)
-
-    " Remap <C-f> and <C-b> for scroll float windows/popups.
-    nnoremap <expr><C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-    nnoremap <expr><C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-    inoremap <expr><C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<Right>"
-    inoremap <expr><C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<Left>"
-
-    " Use CTRL-S for selections ranges.
-    " Requires 'textDocument/selectionRange' support of language server.
-    nmap <silent> <C-s> <Plug>(coc-range-select)
-    xmap <silent> <C-s> <Plug>(coc-range-select)
+    hi CocHighlightText guibg=#556873 gui=bold
 
     " Add `:Format` command to format current buffer.
     command! -nargs=0 Format :call CocAction('format')
@@ -705,20 +833,10 @@ if has_key(g:plugs, 'coc.nvim')
 
 
     if index(g:coc_global_extensions, 'coc-git') != -1
-        set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
-        autocmd User CocGitStatusChange {command}
-        " navigate chunks of current buffer
-        nmap [c <Plug>(coc-git-prevchunk)
-        nmap ]c <Plug>(coc-git-nextchunk)
-        " show chunk diff at current position
-        nmap gs <Plug>(coc-git-chunkinfo)
-        " show commit contains current position
-        nmap gh <Plug>(coc-git-commit)
-        " create text object for git chunks
-        omap gi <Plug>(coc-git-chunk-inner)
-        xmap gi <Plug>(coc-git-chunk-inner)
-        omap ga <Plug>(coc-git-chunk-outer)
-        xmap ga <Plug>(coc-git-chunk-outer)
-        nnoremap <silent> <space>g :<C-u>CocList --normal gstatus<CR>
+        call CustomCocGit()
+    endif
+
+    if index(g:coc_global_extensions, 'coc-explorer') != -1
+        call CustomCocExplorer()
     endif
 endif

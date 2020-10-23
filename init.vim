@@ -40,6 +40,7 @@ au BufEnter * set fo-=c fo-=r fo-=o
 " set ambiwidth=double
 set t_ut=
 set shortmess=atl
+" 永远显示行号左侧的提示符号
 set signcolumn=yes
 " au VimLeave * set guicursor=a:ver25-blinkon0
 
@@ -321,7 +322,8 @@ nnoremap ; :
 
 nmap <leader>WQ :wa<CR>:q<CR>
 " Quickly close the current window
-nnoremap <leader>q :q<CR>
+" nnoremap <leader>q :q<CR>
+nnoremap <leader>q :bd<CR>
 nnoremap <leader>qq :qall<CR>
 " Quickly save the current file
 nnoremap <leader>w :w<CR>
@@ -345,7 +347,7 @@ function! HideNumber()
     set number?
 endfunc
 " ,m 显示/隐藏行号
-nnoremap <leader>m :call HideNumber()<CR>
+nnoremap <space>l :call HideNumber()<CR>
 " ,l 换行开关
 nnoremap <leader>l :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示
