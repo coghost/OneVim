@@ -8,7 +8,18 @@
     "codeLens.enable": true,
     "signature.enable": true,
     "suggest.preferCompleteThanJumpPlaceholder": true,
-    
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.diagnosticSeverityOverrides": {},
+    "python.analysis.extraPaths": [],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.useLibraryCodeForTypes": true,
+    "python.formatting.provider": "black",
+    "python.venvPath": "~/.local/share/virtualenvs",
+    "python.formatting.blackArgs": [
+        "--line-length=120",
+        "--skip-string-normalization"
+    ],
     "python.formatting.autopep8Args": [
         "--max-line-length=120",
         "--ignore=E402"

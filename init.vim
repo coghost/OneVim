@@ -26,11 +26,12 @@ set history=2000
 
 " use system clipboard
 set clipboard+=unnamed
+set clipboard=unnamedplus               " Copy paste between vim and everything else
 
 " 配置变更立即生效
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
-
 map <leader>r :source ~/.config/nvim/init.vim<CR>
+
 set fillchars=vert:┃ " for vsplits
 set lazyredraw
 
@@ -55,6 +56,8 @@ filetype plugin on
 filetype plugin indent on
 " 文件修改后自动载入
 set autoread
+set iskeyword+=-
+set conceallevel=0                      " So that I can see `` in markdown files
 
 " ctrlP 排除某些文件/目录
 set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
@@ -67,10 +70,6 @@ set viminfo^=%
 set nobackup
 " 关闭交换文件
 set noswapfile
-
-" 设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制, 不需要可以去掉
-" not valid in NeoVim
-set t_ti= t_te=
 
 " 鼠标暂不启用, 键盘党..../ 启用鼠标
 " set mouse-=a
@@ -231,14 +230,14 @@ function! NumberToggle()
     set relativenumber
   endif
 endfunc
-nnoremap <C-n> :call NumberToggle()<cr>
+" nnoremap <C-n> :call NumberToggle()<cr>
 
 " 取消换行
 set nowrap
 " 显示输入的命令
 set showcmd
 " 显示当前vim模式
-set noshowmode
+set noshowmode                          " We don't need to see things like -- INSERT -- anymore
 
 " 突出显示当前列
 set cursorcolumn
@@ -336,7 +335,7 @@ noremap <F1> <Esc>"
 
 " F2 行号开关，用于鼠标复制代码用
 " 为方便复制，用<F2>开启/关闭行号显示:
-function! HideNumber()
+function! HideLineNumber()
     if(&relativenumber == &number)
         set relativenumber! number!
     elseif(&number)
@@ -346,8 +345,8 @@ function! HideNumber()
     endif
     set number?
 endfunc
-" ,m 显示/隐藏行号
-nnoremap <space>l :call HideNumber()<CR>
+" n 显示/隐藏行号
+nnoremap <space>n :call HideLineNumber()<CR>
 " ,l 换行开关
 nnoremap <leader>l :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示
