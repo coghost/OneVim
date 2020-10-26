@@ -9,6 +9,14 @@ let g:mapleader = ','
 " ========== [START] install bundles ==========
 " =============================================
 " install bundles
+" auto-install vim-plug
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  "autocmd VimEnter * PlugInstall
+  "autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+
 if filereadable(expand("~/.nvimrc.plugs"))
     source ~/.nvimrc.plugs
 endif
@@ -30,13 +38,15 @@ set clipboard=unnamedplus               " Copy paste between vim and everything 
 
 " 配置变更立即生效
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
-map <leader>r :source ~/.config/nvim/init.vim<CR>
+map <leader>rld :source ~/.config/nvim/init.vim<CR>
 
 set fillchars=vert:┃ " for vsplits
 set lazyredraw
 
 " stop annying auto commenting on new lines
 au BufEnter * set fo-=c fo-=r fo-=o
+
+set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 
 " set ambiwidth=double
 set t_ut=
@@ -182,6 +192,7 @@ let base16colorspace=256
 set termguicolors
 " colorscheme onedark
 colorscheme vim-material
+" colorscheme toast
 " colorscheme base16-default-dark
 
 set laststatus=2
@@ -381,8 +392,8 @@ map <C-l> <C-W>l
 
 map <up> :res +5<CR>
 map <down> :res -5<CR>
-map <S-left> :vertical resize-5<CR>
-map <S-right> :vertical resize+5<CR>
+map <M-left> :vertical resize-5<CR>
+map <M-right> :vertical resize+5<CR>
 
 " tab/buffer相关
 
@@ -508,8 +519,8 @@ autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,pe
 if has("autocmd")
   " Highlight TODO, FIXME, NOTE, etc.
   if v:version > 701
-    autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|DONE\|XXX\|BUG\|HACK\)')
-    autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
+    autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|WARN\|FIXME\|CHANGED\|DONE\|XXX\|BUG\|HACK\)', -1)
+    autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)', -1)
   endif
 endif
 
