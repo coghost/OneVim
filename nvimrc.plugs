@@ -9,14 +9,10 @@ endif
 function! UnusedPlugins() abort
     """"" same as sneak
     Plug 'easymotion/vim-easymotion'
-    """"" same as coc-explorer
-    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
     """"" fzf.vim using coc-fzf-preview
     Plug 'junegunn/fzf.vim'
     """"" same as fzf.vim, but has the ability to use C-d/C-u to go half-page-down/up for preview buffer
     Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
-    """"" similiar function with fzf.vim but with a popup like alfred
-    Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     """"" same but lighter than coc.nvim
     Plug 'prabirshrestha/vim-lsp'
     " Plug 'jmcantrell/vim-virtualenv'
@@ -52,6 +48,7 @@ function! EnableUiRelated() abort
     " ========== themes ==========
     Plug 'hzchirs/vim-material'
     Plug 'joshdick/onedark.vim'
+    Plug 'jsit/toast.vim'
     " ========== ui ==========
     Plug 'mhinz/vim-startify'
     Plug 'psliwka/vim-smoothie'
@@ -69,6 +66,7 @@ function! WorkEfficiency() abort
     Plug 'mg979/vim-visual-multi', {'branch': 'master'}
     Plug 'yilin-yang/vim-markbar'
     Plug 'ntpeters/vim-better-whitespace'
+    Plug 'wellle/context.vim'
 endfunction
 
 
@@ -84,7 +82,9 @@ function! WorkAsynchronous() abort
     Plug 'liuchengxu/vista.vim'
     Plug 'MattesGroeger/vim-bookmarks'
     Plug 'ryanoasis/vim-devicons'
-    Plug 'iamcco/coc-spell-checker'
+    Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
+    Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
 endfunction
 
 
@@ -122,8 +122,43 @@ call plug#end()
 " --------------------------------------------------
 " startify
 " --------------------------------------------------
-if has_key(g:plugs, 'startify')
-    let g:startify_bookmarks = ['~/svn', '~/dev']
+if has_key(g:plugs, 'vim-startify')
+    let g:startify_session_dir = '~/.config/nvim/session'
+    let g:startify_session_autoload = 1
+    let g:startify_session_delete_buffers = 1
+    let g:startify_change_to_vcs_root = 1
+    let g:startify_fortune_use_unicode = 1
+    let g:startify_session_persistence = 1
+    let g:startify_enable_special = 0
+
+    " returns all modified files of the current git repo
+    " `2>/dev/null` makes the command fail quietly, so that when we are not
+    " in a git repo, the list will be empty
+    function! s:gitModified()
+        let files = systemlist('git ls-files -m 2>/dev/null')
+        return map(files, "{'line': v:val, 'path': v:val}")
+    endfunction
+
+    " same as above, but show untracked files, honouring .gitignore
+    function! s:gitUntracked()
+        let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
+        return map(files, "{'line': v:val, 'path': v:val}")
+    endfunction
+
+    let g:startify_lists = [
+        \ { 'type': 'sessions',  'header': ['   Sessions']       },
+        \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+        \ { 'type': 'files',     'header': ['   MRU']            },
+        \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+        \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
+        \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
+        \ { 'type': 'commands',  'header': ['   Commands']       },
+        \ ]
+    " autocmd BufEnter *
+    "    \ if !exists('t:startify_new_tab') && empty(expand('%')) && !exists('t:goyo_master') |
+    "    \   let t:startify_new_tab = 1 |
+    "    \   Startify |
+    "    \ endif
 endif
 
 
@@ -236,13 +271,15 @@ if has_key(g:plugs, 'vim-gitgutter')
         let [a,m,r] = GitGutterGetHunkSummary()
         return printf('+%d ~%d -%d', a, m, r)
     endfunction
-    set statusline+=%{GitStatus()}
+    set statusline^=%{GitStatus()}
 
     nmap <leader>ghhs <Plug>(GitGutterStageHunk)
     nmap <leader>gs <Plug>(GitGutterPreviewHunk)
     nmap <leader>gu <Plug>(GitGutterUndoHunk)
     " in case press c twice
+    nmap ≠ <Plug>(GitGutterNextHunk)
     nmap ]c <Plug>(GitGutterNextHunk)
+    nmap – <Plug>(GitGutterPrevHunk)
     nmap [c <Plug>(GitGutterPrevHunk)
     " nmap <leader>glt <Plug>(GitGutterLineHighlightsToggle)<cr>
 
@@ -263,7 +300,6 @@ if has_key(g:plugs, 'blamer.nvim')
     let g:blamer_template = '<committer>, <committer-time> • <summary>』'
     let g:blamer_date_format = '%Y/%m/%d %H:%M'
     " let g:blamer_relative_time = 1
-    highlight Blamer guifg=lightgrey
 endif
 
 
@@ -483,11 +519,12 @@ endif
 " --------------------------------------------------
 if has_key(g:plugs, 'vim-airline')
     " let g:airline_section_b = '%{strftime("%c")}'
+    let g:airline_powerline_fonts = 1
     let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_alt_sep = '|'
+    let g:airline#extensions#tabline#left_alt_sep = ''
     let g:airline#extensions#tabline#buffer_nr_show = 0
     let g:airline#extensions#tabline#formatter = 'default'
-    let g:airline_theme = 'desertink'  " 主题
+    let g:airline_theme = 'dark'  " 主题
     let g:airline#extensions#keymap#enabled = 1
     let g:airline#extensions#tabline#buffer_idx_mode = 1
     let g:airline#extensions#tabline#buffer_idx_format = {
@@ -511,6 +548,10 @@ if has_key(g:plugs, 'vim-airline')
     nmap <leader>7 <Plug>AirlineSelectTab7
     nmap <leader>8 <Plug>AirlineSelectTab8
     nmap <leader>9 <Plug>AirlineSelectTab9
+
+    nnoremap <F2> :b#<CR>
+    nnoremap = :bn<CR>
+    nnoremap - :bp<CR>
 endif
 
 
@@ -606,7 +647,7 @@ if has_key(g:plugs, 'fzf.vim')
     endfunction
     command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
-    " nnoremap <silent> <C-\> :Rg<cr>
+    nnoremap <silent> <C-\> :Rg<cr>
     " nnoremap <silent> <Space>f :Files<cr>
     " nnoremap <silent> <Space>g :GFiles<cr>
 endif
@@ -616,21 +657,24 @@ endif
 " semshi
 " --------------------------------------------------
 if has_key(g:plugs, 'semshi')
+    let g:semshi#filetypes = ['python']
     function! MapSemshi() abort
         if &filetype ==# 'python'
             " nmap <silent> <leader>rr :Semshi rename<CR>
             nmap <silent> <Tab> :Semshi goto name next<CR>
             nmap <silent> <S-Tab> :Semshi goto name prev<CR>
-            nmap <silent> <leader>c :Semshi goto class next<CR>
-            nmap <silent> <leader>C :Semshi goto class prev<CR>
+            nmap <silent> ]n :Semshi goto class next<CR>
+            nmap <silent> [n :Semshi goto class prev<CR>
 
-            nmap <silent> <leader>f :Semshi goto function next<CR>
-            nmap <silent> <leader>F :Semshi goto function prev<CR>
+            nmap <silent> ]f :Semshi goto function next<CR>
+            nmap <silent> [f :Semshi goto function prev<CR>
+            hi semshiGlobal          ctermfg=red guifg=#ff0000
+            sign define semshiError text=E> texthl=semshiErrorSign
         endif
     endfunction
     " nnoremap <silent> <leader>ms :call MapSemshi()<CR>
     autocmd FileType python call MapSemshi()
-    autocmd ColorScheme * call MapSemshi()
+    " autocmd ColorScheme * call MapSemshi()
 endif
 
 
@@ -662,17 +706,43 @@ endif
 
 
 " --------------------------------------------------
+" vim-clap
+" --------------------------------------------------
+if has_key(g:plugs, 'vim-clap')
+    " alt+c == ç
+    nnoremap <silent> ç :Clap<CR>
+    " alt+f == ƒ
+    nnoremap <silent> ƒ :Clap files<CR>
+    " alt+b == ∫
+    nnoremap <silent> ∫ :Clap bcommits<CR>
+    " alt+s == ß
+    nnoremap <silent> ß :Clap hist<CR>
+endif
+
+
+" --------------------------------------------------
+" context.vim
+" --------------------------------------------------
+if has_key(g:plugs, 'context.vim')
+    let g:context_nvim_no_redraw = 1
+    nnoremap <silent> <expr> <C-Y> context#util#map('<C-Y>')
+    nnoremap <silent> <expr> <C-E> context#util#map('<C-E>')
+    nnoremap <silent> <expr> zz    context#util#map('zz')
+    nnoremap <silent> <expr> zb    context#util#map('zb')
+    nnoremap <silent> <expr> zt    context#util#map_zt()
+    nnoremap <silent> <expr> H     context#util#map_H()
+endif
+
+
+" --------------------------------------------------
 " coc-fzf-preview same as fzf-preview.vim
 " --------------------------------------------------
-function! CustomeCocFzfPreview() abort
+function! CustomCocFzfPreview() abort
     nmap <Space>f [fzf-p]
     xmap <Space>f [fzf-p]
-    nnoremap <Space>/ :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-    nnoremap <C-P> :<C-u>CocCommand fzf-preview.ProjectGrep --resume<Space>
-    nnoremap <Space>\ :<C-u>CocCommand fzf-preview.ProjectGrep --add-fzf-arg=--nth=3<Space>
 
     nnoremap <silent> [fzf-p]f     :<C-u>CocCommand fzf-preview.FromResources project_mru project<CR>
-    nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
+    " nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
     nnoremap <silent> <Space>g     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
     nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
     nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
@@ -681,10 +751,15 @@ function! CustomeCocFzfPreview() abort
     nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
     nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
     nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
-    nnoremap <silent> [fzf-p]/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
-    nnoremap <silent> [fzf-p]*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+    nnoremap <silent> <Space>*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
+    nnoremap <silent> <Space>/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+    " nnoremap          <Leader>G    :<C-u>CocCommand fzf-preview.ProjectGrep --resume<Space>
+    nnoremap          [fzf-p]/     :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
     nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+    xnoremap          [fzf-p]/     "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
     xnoremap          [fzf-p]gr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+    nnoremap          [fzf-p]\     :<C-u>CocCommand fzf-preview.ProjectGrep --add-fzf-arg=--nth=3<Space>
+    xnoremap          [fzf-p]\     "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"  --add-fzf-arg=--nth=3
     nnoremap <silent> [fzf-p]t     :<C-u>CocCommand fzf-preview.BufferTags<CR>
     nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
     nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
@@ -693,12 +768,28 @@ function! CustomeCocFzfPreview() abort
     nnoremap <silent> [fzf-p]m     :<C-u>CocCommand fzf-preview.Marks<CR>
 
     " floating window size ratio
-    let g:fzf_preview_floating_window_rate = 0.9
+    let g:fzf_preview_floating_window_rate = 0.95
     let g:fzf_preview_command = 'bat --color=always --plain {-1}'
     let g:fzf_preview_filelist_command = 'rg --files --hidden --follow --no-messages -g \!"* *"'
     let g:fzf_preview_lines_command = 'bat --color=always --plain --number'
     let g:fzf_preview_use_dev_icons = 1
     let g:fzf_preview_dev_icons_limit = 5000
+    let g:fzf_preview_dev_icon_prefix_string_length = 3
+    let g:fzf_preview_fzf_preview_window_option = 'right:60%'
+endfunction
+
+
+" --------------------------------------------------
+" coc-spell-checker
+" --------------------------------------------------
+function! CustomCocSpellChecker() abort
+    " Applying codeAction to the selected region.
+    " Example: `<leader>aap` for current paragraph
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " Remap keys for applying codeAction to the current buffer.
+    nmap <leader>ac  <Plug>(coc-codeaction)
 endfunction
 
 
@@ -760,6 +851,7 @@ function! CustomCocExplorer() abort
 
     " List all presets
     nmap <leader>el :CocList explPresets<CR>
+    autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
 endfunction
 
 
@@ -771,6 +863,7 @@ if has_key(g:plugs, 'coc.nvim')
     " \ 'coc-python',
     " \ 'coc-pyright',
     let g:coc_global_extensions = [
+                \ 'coc-actions',
                 \ 'coc-explorer',
                 \ 'coc-flutter-tools',
                 \ 'coc-highlight',
@@ -781,6 +874,7 @@ if has_key(g:plugs, 'coc.nvim')
                 \ 'coc-pyright',
                 \ 'coc-sh',
                 \ 'coc-snippets',
+                \ 'coc-spell-checker',
                 \ 'coc-syntax',
                 \ 'coc-vimlsp',
                 \ 'coc-yaml'
@@ -815,15 +909,16 @@ if has_key(g:plugs, 'coc.nvim')
     "             \ coc#refresh()
     " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    function! s:check_back_space() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
+    " function! s:check_back_space() abort
+    "     let col = col('.') - 1
+    "     return !col || getline('.')[col - 1]  =~# '\s'
+    " endfunction
 
     " Use `[g` and `]g` to navigate diagnostics
     " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    nmap <silent> <F3> <Plug>(coc-diagnostic-next)
 
     " GoTo code navigation.
     nmap <silent> gd <Plug>(coc-definition)
@@ -844,11 +939,17 @@ if has_key(g:plugs, 'coc.nvim')
         endif
     endfunction
 
-    " Highlight the symbol and its references when holding the cursor.
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+    " semshi highlight has conflict with this
+    if has_key(g:plugs, 'semshi') != 1
+        if &filetype !=# 'python'
+            " Highlight the symbol and its references when holding the cursor.
+            autocmd CursorHold * silent call CocActionAsync('highlight')
+        endif
+    endif
 
     " Symbol renaming.
     nmap <leader>rn <Plug>(coc-rename)
+    nmap <F6> <Plug>(coc-rename)
 
     " Formatting selected code.
     " xmap <leader>f  <Plug>(coc-format-selected)
@@ -909,6 +1010,10 @@ if has_key(g:plugs, 'coc.nvim')
     endif
 
     if index(g:coc_global_extensions, 'coc-fzf-preview') != -1
-        call CustomeCocFzfPreview()
+        call CustomCocFzfPreview()
+    endif
+
+    if index(g:coc_global_extensions, 'coc-spell-checker') != -1
+        call CustomCocSpellChecker()
     endif
 endif
