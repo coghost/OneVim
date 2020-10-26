@@ -1,4 +1,28 @@
 {
+    "cSpell.language": "en",
+    "cSpell.dictionaryDefinitions": [
+        {
+            "name": "nebula",
+            "path": "/Users/lihe/Documents/vscode/dicts/nebula.txt"
+        }
+    ],
+    "cSpell.dictionaries": [
+        "nebula"
+    ],
+    "cSpell.ignorePaths": [
+        "**/package-lock.json",
+        "**/node_modules/**",
+        "**/vscode-extension/**",
+        "**/.git/objects/**",
+        ".vscode",
+        "*.plugs",
+        "*.yaml",
+        "*.json",
+        "*.vim",
+        "*.txt"
+    ],
+    "cSpell.allowCompoundWords": true,
+    "cSpell.userWords": [],
     "diagnostic.errorSign": "",
     "diagnostic.warningSign": "",
     "diagnostic.infoSign": "",
@@ -24,6 +48,7 @@
         "--max-line-length=120",
         "--ignore=E402"
     ],
+    "explorer.previewAction.onHover": false,
     "explorer.icon.enableNerdfont": true,
     "explorer.width": 40,
     "explorer.keyMappings": {
