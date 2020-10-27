@@ -3,7 +3,7 @@
     "cSpell.dictionaryDefinitions": [
         {
             "name": "nebula",
-            "path": "/Users/lihe/Documents/vscode/dicts/nebula.txt"
+            "path": "~/Documents/dicts/common1.txt"
         }
     ],
     "cSpell.dictionaries": [
@@ -19,6 +19,7 @@
         "*.yaml",
         "*.json",
         "*.vim",
+        "*.cfg",
         "*.txt"
     ],
     "cSpell.allowCompoundWords": true,

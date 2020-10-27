@@ -356,8 +356,8 @@ function! HideLineNumber()
     endif
     set number?
 endfunc
-" n 显示/隐藏行号
-nnoremap <space>n :call HideLineNumber()<CR>
+" ,n 显示/隐藏行号
+nnoremap <leader>n :call HideLineNumber()<CR>
 " ,l 换行开关
 nnoremap <leader>l :set wrap! wrap?<CR>
 " ,, 语法开关，关闭语法可以加快大文件的展示

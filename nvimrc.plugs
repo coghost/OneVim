@@ -66,7 +66,11 @@ function! WorkEfficiency() abort
     Plug 'mg979/vim-visual-multi', {'branch': 'master'}
     Plug 'yilin-yang/vim-markbar'
     Plug 'ntpeters/vim-better-whitespace'
-    Plug 'wellle/context.vim'
+    " Plug 'wellle/context.vim'
+    Plug 'brooth/far.vim'
+    Plug 'CrispyDrone/vim-tasks'
+    Plug 'mbbill/undotree'
+    Plug 'farmergreg/vim-lastplace'
 endfunction
 
 
@@ -84,7 +88,6 @@ function! WorkAsynchronous() abort
     Plug 'ryanoasis/vim-devicons'
     Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
-    Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
 endfunction
 
 
@@ -159,6 +162,9 @@ if has_key(g:plugs, 'vim-startify')
     "    \   let t:startify_new_tab = 1 |
     "    \   Startify |
     "    \ endif
+    let g:startify_bookmarks = [
+            \ { 'd': '~/Documents/dicts/common1.txt' },
+            \ ]
 endif
 
 
@@ -167,12 +173,12 @@ endif
 " --------------------------------------------------
 if has_key(g:plugs, 'vim-sneak')
     " let g:sneak#label = 1
-    nmap = <Plug>Sneak_;
-    omap = <Plug>Sneak_;
-    xmap = <Plug>Sneak_;
-    nmap - <Plug>Sneak_,
-    omap - <Plug>Sneak_,
-    xmap - <Plug>Sneak_,
+    nmap + <Plug>Sneak_;
+    omap + <Plug>Sneak_;
+    xmap + <Plug>Sneak_;
+    nmap _ <Plug>Sneak_,
+    omap _ <Plug>Sneak_,
+    xmap _ <Plug>Sneak_,
 endif
 
 
@@ -292,7 +298,7 @@ endif
 " blamer
 " --------------------------------------------------
 if has_key(g:plugs, 'blamer.nvim')
-    let g:blamer_enabled = 1
+    let g:blamer_enabled = 0
     let g:blamer_delay = 500
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = '  『  '
@@ -521,23 +527,23 @@ if has_key(g:plugs, 'vim-airline')
     " let g:airline_section_b = '%{strftime("%c")}'
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_alt_sep = ''
+    let g:airline#extensions#tabline#left_alt_sep = ''
     let g:airline#extensions#tabline#buffer_nr_show = 0
     let g:airline#extensions#tabline#formatter = 'default'
     let g:airline_theme = 'dark'  " 主题
     let g:airline#extensions#keymap#enabled = 1
     let g:airline#extensions#tabline#buffer_idx_mode = 1
     let g:airline#extensions#tabline#buffer_idx_format = {
-                \ '0': '0 ',
-                \ '1': '1 ',
-                \ '2': '2 ',
-                \ '3': '3 ',
-                \ '4': '4 ',
-                \ '5': '5 ',
-                \ '6': '6 ',
-                \ '7': '7 ',
-                \ '8': '8 ',
-                \ '9': '9 '
+                \ '0': ' ',
+                \ '1': ' ',
+                \ '2': ' ',
+                \ '3': ' ',
+                \ '4': ' ',
+                \ '5': ' ',
+                \ '6': ' ',
+                \ '7': ' ',
+                \ '8': ' ',
+                \ '9': ' '
                 \}
     nmap <leader>1 <Plug>AirlineSelectTab1
     nmap <leader>2 <Plug>AirlineSelectTab2
@@ -732,6 +738,37 @@ if has_key(g:plugs, 'context.vim')
     nnoremap <silent> <expr> zt    context#util#map_zt()
     nnoremap <silent> <expr> H     context#util#map_H()
 endif
+
+
+" --------------------------------------------------
+" vim-tasks
+" --------------------------------------------------
+if has_key(g:plugs, 'vim-tasks')
+    let maplocalleader="\<space>"
+    " key bindings
+    " n/N new tasks
+    " t/T mark as tasks
+    " b/x/d begin/cancel/done a task
+    " a archive a task
+    " ml/mm/mh/mc mark task as low/medium/high/critical priority
+    " S sort tasks based on priority
+endif
+
+
+" --------------------------------------------------
+" undotree
+" --------------------------------------------------
+if has_key(g:plugs, 'undotree')
+    nnoremap <space>h :UndotreeToggle<cr>
+    let g:undotree_WindowLayout = 1
+    let g:undotree_SplitWidth = 48
+    let g:undotree_SetFocusWhenToggle = 1
+    if has("persistent_undo")
+        set undodir=$HOME/tmp/.undodir
+        set undofile
+    endif
+endif
+
 
 
 " --------------------------------------------------
