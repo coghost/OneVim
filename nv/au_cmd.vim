@@ -23,12 +23,28 @@ autocmd BufReadPost quickfix nnoremap <buffer> v <C-w><Enter><C-w>L
 autocmd BufReadPost quickfix nnoremap <buffer> s <C-w><Enter><C-w>K
 
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab ai
-autocmd FileType ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
+autocmd FileType yaml,ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
 autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
 autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
 " set for # indent, python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
+
+" ==========================================
+" functions
+" ==========================================
+let g:FoldMethod = 0
+fun! ToggleFold()
+    if g:FoldMethod == 0
+        exe "normal! zM"
+        let g:FoldMethod = 1
+    else
+        exe "normal! zR"
+        let g:FoldMethod = 0
+    endif
+endfun
+map <Space>zz :call ToggleFold()<cr>
+
 
 " Trailing white space
 fun! <SID>StripTrailingWhitespaces()
