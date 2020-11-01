@@ -45,6 +45,17 @@ fun! ToggleFold()
 endfun
 map <Space>zz :call ToggleFold()<cr>
 
+function! HideLineNumber()
+    if(&relativenumber == &number)
+        set relativenumber! number!
+    elseif(&number)
+        set number!
+    else
+        set relativenumber!
+    endif
+    set number?
+endfunc
+nnoremap <leader>n :call HideLineNumber()<CR>
 
 " Trailing white space
 fun! <SID>StripTrailingWhitespaces()
@@ -73,7 +84,6 @@ function! AutoSetFileHead()
     "如果文件类型为python
     if &filetype == 'python'
         call setline(1, "\#!/usr/bin/env python")
-        " call append(1, "\# encoding: utf-8")
         call setline(1, "\# -*- coding: utf-8 -*-")
     endif
 
@@ -106,4 +116,5 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 " this is usful when there are more than one windows
 nnoremap <silent> <Leader>z :ZoomToggle<CR>
+
 " au! BufWritePost $MYVIMRC source $MYVIMRC      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC

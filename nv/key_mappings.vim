@@ -1,9 +1,14 @@
 " Map ; to : and save a million keystrokes
 nnoremap ; :
+noremap <F1> <Esc>"
 
+
+" ------------------------------------------
+" File settings
+" ------------------------------------------
 " INFO: reload MYVIMRC without reopen file
 map <leader>rld :source $MYVIMRC<CR>
-
+nnoremap U <C-r>
 nmap <leader>WQ :wa<CR>:q<CR>
 nnoremap <leader>q :bd<CR>
 nnoremap <leader>qq :qall<CR>
@@ -11,25 +16,13 @@ nnoremap <leader>w :w<CR>
 " [WARN: sudo trick]
 " https://stackoverflow.com/questions/2600783/how-does-the-vim-write-with-sudo-trick-work `%` does mean `the current file name`
 cmap w!! w !sudo tee %
-" mapping U to undo
-nnoremap U <C-r>
-
-function! HideLineNumber()
-    if(&relativenumber == &number)
-        set relativenumber! number!
-    elseif(&number)
-        set number!
-    else
-        set relativenumber!
-    endif
-    set number?
-endfunc
-nnoremap <leader>n :call HideLineNumber()<CR>
 nnoremap <leader>l :set wrap! wrap?<CR>
 nnoremap <leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
-noremap <F1> <Esc>"
 
+" ------------------------------------------
+" Arrow settings
+" ------------------------------------------
 " Disable arrow keys
 map <Left> <Nop>
 map <Right> <Nop>
@@ -47,7 +40,9 @@ map <M-left> :vertical resize-5<CR>
 map <M-right> :vertical resize+5<CR>
 
 
+" ------------------------------------------
 " Search settings
+" ------------------------------------------
 noremap <silent><leader>/ :nohls<CR>
 nnoremap / /\v
 vnoremap / /\v
@@ -80,7 +75,6 @@ vnoremap > >gv
 map Y y$
 " 复制选中区到系统剪切板中
 vnoremap <leader>y "+y
-
 
 " ------------------------------------------
 " coding keymap settings
