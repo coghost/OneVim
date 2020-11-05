@@ -1,62 +1,6 @@
 " --------------------------------------------------
-" vim-gitgutter
+" far.vim
 " --------------------------------------------------
-if has_key(g:plugs, 'vim-gitgutter')
-    let g:gitgutter_grep = 'rg'
-    set updatetime=100
-    let g:gitgutter_max_signs = -1   " default value (otherwise)
-    let _sign = '▌'
-    let g:gitgutter_sign_added = _sign
-    let g:gitgutter_sign_modified = _sign
-    let g:gitgutter_sign_removed = _sign
-    let g:gitgutter_sign_removed_first_line = _sign
-    let g:gitgutter_sign_removed_above_and_below = '{'
-    let g:gitgutter_sign_modified_removed = ''
-
-    " if I want to use another git-plugin
-    " let g:gitgutter_sign_allow_clobber = 1
-
-    let g:gitgutter_highlight_lines = 0
-    let g:gitgutter_highlight_linenrs = 1
-    let g:gitgutter_preview_win_floating = 1
-    let g:gitgutter_use_location_list = 1
-
-    function! GitStatus()
-        let [a,m,r] = GitGutterGetHunkSummary()
-        return printf('+%d ~%d -%d', a, m, r)
-    endfunction
-    set statusline^=%{GitStatus()}
-
-    nmap <leader>ghhs <Plug>(GitGutterStageHunk)
-    nmap <leader>gs <Plug>(GitGutterPreviewHunk)
-    nmap <leader>gu <Plug>(GitGutterUndoHunk)
-    " in case press c twice
-    nmap ≠ <Plug>(GitGutterNextHunk)
-    nmap ]c <Plug>(GitGutterNextHunk)
-    nmap – <Plug>(GitGutterPrevHunk)
-    nmap [c <Plug>(GitGutterPrevHunk)
-    " nmap <leader>glt <Plug>(GitGutterLineHighlightsToggle)<cr>
-
-    highlight link GitGutterChangeLine DiffText
-    highlight link GitGutterChangeLineNr Underlined
-endif
-
-
-" --------------------------------------------------
-" blamer
-" --------------------------------------------------
-if has_key(g:plugs, 'blamer.nvim')
-    let g:blamer_enabled = 0
-    let g:blamer_delay = 500
-    let g:blamer_show_in_insert_modes = 0
-    let g:blamer_prefix = '  『  '
-    " let g:blamer_prefix = '     '
-    let g:blamer_template = '<committer>, <committer-time> • <summary>』'
-    let g:blamer_date_format = '%Y/%m/%d %H:%M'
-    " let g:blamer_relative_time = 1
-endif
-
-
 if has_key(g:plugs, 'far.vim')
     set regexpengine=1
     set ignorecase smartcase  " ignore case only when the pattern contains no capital letters
@@ -94,59 +38,6 @@ if has_key(g:plugs, 'undotree')
         set undodir=$HOME/tmp/.undodir
         set undofile
     endif
-endif
-
-
-" --------------------------------------------------
-" vista.vim
-" --------------------------------------------------
-if has_key(g:plugs, 'vista.vim')
-    nmap <F9> :Vista!!<CR>
-
-    function! NearestMethodOrFunction() abort
-        return get(b:, 'vista_nearest_method_or_function', '')
-    endfunction
-    set statusline+=%{NearestMethodOrFunction()}
-    autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-    let g:vista#renderer#enable_icon = 1
-    let g:vista_default_executive = 'ctags'
-    let g:vista_executive_for = {
-                \ 'cpp': 'vim_lsp',
-                \ 'php': 'vim_lsp',
-                \ 'python': 'coc',
-                \ }
-
-    " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
-    let g:vista#renderer#icons = {
-                \   "function": "\uf794",
-                \   "variable": "\uf71b",
-                \  }
-    " let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-    let g:vista_icon_indent = ["▸ ", ""]
-endif
-
-
-" --------------------------------------------------
-" chadtree
-" --------------------------------------------------
-if has_key(g:plugs, 'chadtree')
-    lua vim.api.nvim_set_var("chadtree_ignores", { name = {".*", ".git"} })
-endif
-
-
-" --------------------------------------------------
-" vim-clap
-" --------------------------------------------------
-if has_key(g:plugs, 'vim-clap')
-    " alt+c == ç
-    nnoremap <silent> ç :Clap<CR>
-    " alt+f == ƒ
-    nnoremap <silent> ƒ :Clap files<CR>
-    " alt+b == ∫
-    nnoremap <silent> ∫ :Clap bcommits<CR>
-    " alt+s == ß
-    nnoremap <silent> ß :Clap hist<CR>
 endif
 
 
@@ -196,7 +87,7 @@ endif
 " vim-sneak
 " --------------------------------------------------
 if has_key(g:plugs, 'vim-sneak')
-    " let g:sneak#label = 1
+    let g:sneak#label = 1
     nmap + <Plug>Sneak_;
     omap + <Plug>Sneak_;
     xmap + <Plug>Sneak_;
@@ -224,6 +115,16 @@ if has_key(g:plugs, 'vim-bookmarks')
     let g:bookmark_highlight_lines = 1
 endif
 
+
+if has_key(g:plugs, 'quick-scope')
+    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T', 'w', 'b']
+    augroup qs_colors
+        autocmd!
+        autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+        autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+    augroup END
+    let g:qs_max_chars=150
+endif
 
 " --------------------------------------------------
 " vim-better-whitespace

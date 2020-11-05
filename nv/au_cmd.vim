@@ -5,8 +5,11 @@
 " autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=300}
 " 打开自动定位到最后编辑的位置, 需要确认 .viminfo 当前用户可写
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+let g:auto_save = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CursorHoldI", "CompleteDone"]
 
 autocmd FocusLost * :set norelativenumber number
 autocmd FocusGained * :set relativenumber
@@ -95,9 +98,9 @@ endfunc
 
 " AutoPasteMode: https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
 function! XTermPasteBegin()
-  set pastetoggle=<Esc>[201~
-  set paste
-  return ""
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
 endfunction
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
@@ -116,5 +119,5 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 " this is usful when there are more than one windows
 nnoremap <silent> <Leader>z :ZoomToggle<CR>
-
-" au! BufWritePost $MYVIMRC source $MYVIMRC      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
+let g:python3_host_prog = expand('~/.local/share/virtualenvs/compete-crawler-tB3MyaYB/bin/python3')
+au! BufWritePost $MYVIMRC source $MYVIMRC      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC

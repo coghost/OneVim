@@ -8,13 +8,12 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 " ==========================================
 
-" load installed plugs
 function! Fundations() abort
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endfunction
 
-function! UIUERelated() abort
+function! UIUE() abort
     " ========== themes ==========
     Plug 'hzchirs/vim-material'    " themes
     Plug 'kaicataldo/material.vim', { 'branch': 'main' }
@@ -28,38 +27,41 @@ function! UIUERelated() abort
     Plug 'machakann/vim-highlightedyank' " highlight yank
     Plug 'luochen1990/rainbow'           " colorful matched ({})
     Plug 'pedrohdz/vim-yaml-folds'       " fold yaml file
+    Plug 'psliwka/vim-smoothie'          " wonderful scroll up/down experience
 endfunction
 
-function! Programming() abort
-    " ========== git ==========
+function! GitPlugs() abort
     Plug 'junegunn/gv.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
     Plug 'APZelos/blamer.nvim'
-    " ========== writing ==========
-    Plug 'tpope/vim-commentary'    " comment on codes
-    Plug 'jiangmiao/auto-pairs'    " auto pair inputs
-    Plug 'tpope/vim-surround'      " quick input
-    Plug 'brooth/far.vim'          " quick find/replace in all files
-    Plug 'junegunn/vim-easy-align' " align better
-    Plug 'mbbill/undotree'         " I can regret more
-    " ========== layout ==========
+endfunction
+
+function! Layouts() abort
     Plug 'liuchengxu/vista.vim'                                              " code outline
     Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'} " tree navigation
     Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }            " popup navigation
-    " ========== reading ==========
-    " Plug 'wellle/context.vim'
-    " ========== operating ==========
+    Plug 'voldikss/vim-floaterm'
+endfunction
+
+function! Programming() abort
+    " ========== edit ==========
+    Plug 'tpope/vim-commentary'                         " comment on codes
+    Plug 'jiangmiao/auto-pairs'                         " auto pair inputs
+    Plug 'tpope/vim-surround'                           " quick input
+    Plug 'brooth/far.vim'                               " quick find/replace in all files
+    Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multiple edit
+    Plug 'junegunn/vim-easy-align'                      " align better
+    Plug 'mbbill/undotree'                              " I can regret more
+    " ========== move_faster ==========
     Plug 'mhinz/vim-startify'                           " most recent open files history
     Plug 'justinmk/vim-sneak'                           " quick jump to 2 chars
-    Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multiple edit
     Plug 'yilin-yang/vim-markbar'                       " marks
     Plug 'MattesGroeger/vim-bookmarks'
-    " ========== interactivity ==========
-    Plug 'psliwka/vim-smoothie'                         " wonderful scroll up/down experience
+    Plug 'unblevable/quick-scope'                       " Plug
+    Plug 'airblade/vim-rooter'
     " ========== automatic ==========
     Plug 'ntpeters/vim-better-whitespace'   " remove whitespace
-    Plug 'vim-vdebug/vdebug'
 endfunction
 
 function! PythonDedicated() abort
@@ -69,24 +71,40 @@ function! PythonDedicated() abort
     Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 endfunction
 
-function! FocusMode() abort
+function! Typing() abort
     Plug 'junegunn/goyo.vim'        " typing experience
     Plug 'junegunn/limelight.vim'
 endfunction
 
 function! Assistance() abort
     Plug 'voldikss/vim-translator'
-    " ========== todolist ==========
     Plug 'romgrk/todoist.nvim', { 'do': ':TodoistInstall' }
+    Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+    Plug 'liuchengxu/vim-which-key'
 endfunction
 
+function! Markdowns() abort
+    " tabular plugin is used to format tables
+    Plug 'godlygeek/tabular'
+    " JSON front matter highlight plugin
+    Plug 'elzr/vim-json'
+    Plug 'plasticboy/vim-markdown'
+    Plug 'vim-pandoc/vim-pandoc'
+    Plug 'vim-pandoc/vim-pandoc-syntax'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+endfunction
+
+" load installed plugs
 function! InstallMyPlugs() abort
     call Fundations()
-    call UIUERelated()
+    call UIUE()
+    call GitPlugs()
+    call Layouts()
     call Programming()
     call PythonDedicated()
-    call FocusMode()
+    call Typing()
     call Assistance()
+    call Markdowns()
 endfunction
 
 call plug#begin('~/.nvim/plugged')

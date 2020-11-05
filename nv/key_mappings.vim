@@ -16,7 +16,7 @@ nnoremap <leader>w :w<CR>
 " [WARN: sudo trick]
 " https://stackoverflow.com/questions/2600783/how-does-the-vim-write-with-sudo-trick-work `%` does mean `the current file name`
 cmap w!! w !sudo tee %
-nnoremap <leader>l :set wrap! wrap?<CR>
+nnoremap <leader>lw :set wrap! wrap?<CR>
 nnoremap <leader>, :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
 

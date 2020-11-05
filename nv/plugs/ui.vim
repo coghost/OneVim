@@ -93,3 +93,8 @@ endif
 if has_key(g:plugs, 'rainbow')
     let g:rainbow_active = 1
 endif
+
+
+if has_key(g:plugs, 'fzf')
+    let g:fzf_history_dir = '~/.local/share/fzf-history'
+endif

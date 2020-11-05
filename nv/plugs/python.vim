@@ -5,9 +5,8 @@ if has_key(g:plugs, 'semshi')
     let g:semshi#filetypes = ['python']
     function! MapSemshi() abort
         if &filetype ==# 'python'
-            " nmap <silent> <leader>rr :Semshi rename<CR>
-            nmap <silent> <Tab> :Semshi goto name next<CR>
-            nmap <silent> <S-Tab> :Semshi goto name prev<CR>
+            nmap <silent> <c-j> :Semshi goto name next<CR>
+            nmap <silent> <c-k> :Semshi goto name prev<CR>
             nmap <silent> ]n :Semshi goto class next<CR>
             nmap <silent> [n :Semshi goto class prev<CR>
 
