@@ -1,6 +1,5 @@
 " Map ; to : and save a million keystrokes
 nnoremap ; :
-noremap <F1> <Esc>"
 
 
 " ------------------------------------------

@@ -49,6 +49,7 @@ function! Programming() abort
     Plug 'tpope/vim-commentary'                         " comment on codes
     Plug 'jiangmiao/auto-pairs'                         " auto pair inputs
     Plug 'tpope/vim-surround'                           " quick input
+    Plug 'tpope/vim-repeat'                             " support repeat other plugins
     Plug 'brooth/far.vim'                               " quick find/replace in all files
     Plug 'mg979/vim-visual-multi', {'branch': 'master'} " multiple edit
     Plug 'junegunn/vim-easy-align'                      " align better
@@ -56,19 +57,21 @@ function! Programming() abort
     " ========== move_faster ==========
     Plug 'mhinz/vim-startify'                           " most recent open files history
     Plug 'justinmk/vim-sneak'                           " quick jump to 2 chars
-    Plug 'yilin-yang/vim-markbar'                       " marks
+    " Plug 'yilin-yang/vim-markbar'                       " marks
     Plug 'MattesGroeger/vim-bookmarks'
     Plug 'unblevable/quick-scope'                       " Plug
     Plug 'airblade/vim-rooter'
-    " ========== automatic ==========
-    Plug 'ntpeters/vim-better-whitespace'   " remove whitespace
+    Plug 'ntpeters/vim-better-whitespace'               " remove whitespace
 endfunction
 
 function! PythonDedicated() abort
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " python colorize
+    " snippets
     Plug 'SirVer/ultisnips'                                " snippets
     Plug 'honza/vim-snippets'                              " real snippets
     Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
+    Plug 'thinca/vim-quickrun'
+    Plug 'tpope/vim-abolish'
 endfunction
 
 function! Typing() abort
@@ -78,18 +81,20 @@ endfunction
 
 function! Assistance() abort
     Plug 'voldikss/vim-translator'
-    Plug 'romgrk/todoist.nvim', { 'do': ':TodoistInstall' }
     Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
     Plug 'liuchengxu/vim-which-key'
+    Plug 'jceb/vim-orgmode'
+endfunction
+
+function! TaskManagement() abort
+    Plug 'romgrk/todoist.nvim', { 'do': ':TodoistInstall' }
+    Plug 'n0v1c3/vira', { 'do': './install.sh' }
 endfunction
 
 function! Markdowns() abort
-    " tabular plugin is used to format tables
-    Plug 'godlygeek/tabular'
-    " JSON front matter highlight plugin
-    Plug 'elzr/vim-json'
-    Plug 'plasticboy/vim-markdown'
-    Plug 'vim-pandoc/vim-pandoc'
+    " Plug 'plasticboy/vim-markdown'
+    Plug 'godlygeek/tabular' " tabular plugin is used to format tables
+    Plug 'elzr/vim-json'     " JSON front matter highlight plugin
     Plug 'vim-pandoc/vim-pandoc-syntax'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 endfunction
@@ -105,6 +110,7 @@ function! InstallMyPlugs() abort
     call Typing()
     call Assistance()
     call Markdowns()
+    call TaskManagement()
 endfunction
 
 call plug#begin('~/.nvim/plugged')

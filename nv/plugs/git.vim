@@ -32,13 +32,16 @@ if has_key(g:plugs, 'vim-gitgutter')
     nmap <leader>gu <Plug>(GitGutterUndoHunk)
     " in case press c twice
     nmap ≠ <Plug>(GitGutterNextHunk)
+    nmap <M-=> <Plug>(GitGutterNextHunk)
     nmap ]c <Plug>(GitGutterNextHunk)
     nmap – <Plug>(GitGutterPrevHunk)
+    nmap <M--> <Plug>(GitGutterPrevHunk)
     nmap [c <Plug>(GitGutterPrevHunk)
     " nmap <leader>glt <Plug>(GitGutterLineHighlightsToggle)<cr>
 
     highlight link GitGutterChangeLine DiffText
     highlight link GitGutterChangeLineNr Underlined
+    highlight link GitGutterDeleteLineNr Underlined
 endif
 
 

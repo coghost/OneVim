@@ -42,12 +42,13 @@ endif
 if has_key(g:plugs, 'vim-clap')
     " alt+c == ç
     nnoremap <silent> ç :Clap<CR>
+    nnoremap <silent> <M-c> :Clap bcommits<CR>
     " alt+f == ƒ
     nnoremap <silent> ƒ :Clap files<CR>
+    nnoremap <silent> <M-f> :Clap bcommits<CR>
     " alt+b == ∫
     nnoremap <silent> ∫ :Clap bcommits<CR>
-    " alt+s == ß
-    nnoremap <silent> ß :Clap hist<CR>
+    nnoremap <silent> <M-b> :Clap bcommits<CR>
 endif
 
 
@@ -62,8 +63,8 @@ if has_key(g:plugs, 'vim-floaterm')
     " let g:floaterm_keymap_toggle = '<F12>'
     let g:floaterm_width = 0.9
     let g:floaterm_height = 0.9
-    nnoremap   <silent>   <F7>    :FloatermNew<CR>
-    tnoremap   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
+    " nnoremap   <silent>   <F7>    :FloatermNew<CR>
+    " tnoremap   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
     " nnoremap   <silent>   <F8>    :FloatermPrev<CR>
     " tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
     " nnoremap   <silent>   <F9>    :FloatermNext<CR>

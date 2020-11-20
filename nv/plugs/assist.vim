@@ -114,9 +114,10 @@ if has_key(g:plugs, 'rnvimr')
     let g:rnvimr_ranger_cmd = 'ranger --cmd="set draw_borders both"'
     highlight link RnvimrNormal CursorLine
     " nmap <Space>p :RnvimrToggle<CR>
-    " Alt+o
     nnoremap <silent> ø :RnvimrToggle<CR>
+    nnoremap <silent> <M-o> :RnvimrToggle<CR>
     tnoremap <silent> ø <C-\><C-n>:RnvimrToggle<CR>
+    tnoremap <silent> <M-o> <C-\><C-n>:RnvimrToggle<CR>
     let g:rnvimr_action = {
                 \ '<C-t>': 'NvimEdit tabedit',
                 \ '<C-x>': 'NvimEdit split',

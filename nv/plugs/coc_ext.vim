@@ -5,19 +5,21 @@ function! CustomCocFzfPreview() abort
     nmap <Space>f [fzf-p]
     xmap <Space>f [fzf-p]
 
-    nnoremap <silent> [fzf-p]f     :<C-u>CocCommand fzf-preview.FromResources project_mru project<CR>
     " nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
+    " nnoremap          <Leader>G    :<C-u>CocCommand fzf-preview.ProjectGrep --resume<Space>
+    nnoremap <silent> [fzf-p]f     :<C-u>CocCommand fzf-preview.FromResources project_mru project<CR>
     nnoremap <silent> <Space>g     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
     nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
+    nnoremap <silent> <M-s>    :<C-u>CocCommand fzf-preview.GitStatus<CR>
     nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
     nnoremap <silent> [fzf-p]b     :<C-u>CocCommand fzf-preview.Buffers<CR>
+    nnoremap <silent> <Space>b     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
     nnoremap <silent> [fzf-p]B     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
     nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
     nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
     nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
     nnoremap <silent> <Space>*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
     nnoremap <silent> <Space>/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-    " nnoremap          <Leader>G    :<C-u>CocCommand fzf-preview.ProjectGrep --resume<Space>
     nnoremap          [fzf-p]/     :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
     nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
     xnoremap          [fzf-p]/     "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
@@ -161,7 +163,7 @@ if has_key(g:plugs, 'coc.nvim')
         " Recently vim can merge signcolumn and number column into one
         set signcolumn=number
     else
-        set signcolumn=yes
+        set signcolumn=auto:2
     endif
 
     " Use tab for trigger completion with characters ahead and navigate.
@@ -182,7 +184,7 @@ if has_key(g:plugs, 'coc.nvim')
     " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
-    nmap <silent> <F3> <Plug>(coc-diagnostic-next)
+    nmap <silent> <F2> <Plug>(coc-diagnostic-next)
 
     " GoTo code navigation.
     nmap <silent> gd <Plug>(coc-definition)

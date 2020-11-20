@@ -119,5 +119,9 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 " this is usful when there are more than one windows
 nnoremap <silent> <Leader>z :ZoomToggle<CR>
-let g:python3_host_prog = expand('~/.local/share/virtualenvs/compete-crawler-tB3MyaYB/bin/python3')
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+com! ListTodo :vimgrep /\<TODO\>/j % | :cope
+com! ListAllTodo :vimgrep /\<TODO\>/j **/*.py | :cope
+
 au! BufWritePost $MYVIMRC source $MYVIMRC      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
