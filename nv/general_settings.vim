@@ -2,10 +2,22 @@
 " General Settings
 " ==========================================
 " colorscheme
-set background=dark
+if &background != 'dark'
+    set background=dark
+endif
 " colorscheme vim-material
 " colorscheme material
-colorscheme toast
+if !exists('g:colors_name')
+    silent! colorscheme toast
+endif
+if !&termguicolors
+    set termguicolors
+endif
+if !exists('g:syntax_on')
+    syntax on
+    syntax enable
+    let g:syntax_on = 1
+end
 
 " ------------------------------------------
 " File settings
@@ -18,7 +30,6 @@ filetype indent on
 filetype plugin on        " Load plugin by file type
 filetype plugin indent on " Enabled by default in nvim
 set encoding=utf-8
-syntax enable
 set hidden                " Required to keep multiple buffers open multiple buffers
 set ignorecase
 set smartcase
