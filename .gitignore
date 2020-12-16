@@ -4,4 +4,3 @@ bundle
 *.bk
 configs
 myconfig.sh
-init.vim

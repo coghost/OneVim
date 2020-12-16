@@ -1,0 +1,62 @@
+{
+    "cSpell.language": "en",
+    "cSpell.dictionaryDefinitions": [
+        {
+            "name": "nebula",
+            "path": "~/Documents/dicts/common1.txt"
+        }
+    ],
+    "cSpell.dictionaries": [
+        "nebula"
+    ],
+    "cSpell.ignorePaths": [
+        "**/package-lock.json",
+        "**/node_modules/**",
+        "**/vscode-extension/**",
+        "**/.git/objects/**",
+        ".vscode",
+        "*.plugs",
+        "*.yaml",
+        "*.json",
+        "*.vim",
+        "*.cfg",
+        "*.txt"
+    ],
+    "cSpell.allowCompoundWords": true,
+    "cSpell.userWords": [],
+    "diagnostic.errorSign": "",
+    "diagnostic.warningSign": "",
+    "diagnostic.infoSign": "",
+    "diagnostic.hintSign": "",
+    "suggest.noselect": false,
+    "suggest.echodocSupport": true,
+    "codeLens.enable": true,
+    "signature.enable": true,
+    "suggest.preferCompleteThanJumpPlaceholder": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.diagnosticSeverityOverrides": {},
+    "python.analysis.extraPaths": [],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.useLibraryCodeForTypes": true,
+    "python.formatting.provider": "black",
+    "python.venvPath": "~/.local/share/virtualenvs",
+    "python.formatting.blackArgs": [
+        "--line-length=120",
+        "--skip-string-normalization"
+    ],
+    "python.formatting.autopep8Args": [
+        "--max-line-length=120",
+        "--ignore=E402"
+    ],
+    "yaml.format.enable":true,
+    "yaml.format.singleQuote": false,
+    "explorer.previewAction.onHover": false,
+    "explorer.icon.enableNerdfont": true,
+    "explorer.width": 40,
+    "explorer.keyMappings": {
+        "<right>": "expand",
+        "<left>": "shrink"
+    },
+    "explorer.quitOnOpen": true
+}
